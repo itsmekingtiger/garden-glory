@@ -90,6 +90,7 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
           ref
               .read(plantListProvider.notifier)
               .add(name: _controller.text, wateringEvery: 0);
+          Navigator.of(context).pop();
         },
       ),
     );

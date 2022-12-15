@@ -1,6 +1,8 @@
 import 'package:brown_brown/database/database_init.dart';
+import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/views/main_page.dart';
 import 'package:brown_brown/views/new_plant_page.dart';
+import 'package:brown_brown/views/plants_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,15 +11,15 @@ import 'package:sqflite/sqflite.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  const databaseName = 'brown_brown.db';
-  final database = await openDatabase(
-    databaseName,
-    version: 1,
-    onCreate: createDatabase,
-  );
+  // const databaseName = 'brown_brown.db';
+  // final database = await openDatabase(
+  //   databaseName,
+  //   version: 1,
+  //   onCreate: createDatabase,
+  // );
 
-  await database.rawQuery(Queries.queriesAllPlants);
-  await database.rawQuery(Queries.queriesAllPlantLogs);
+  // await database.rawQuery(Queries.queriesAllPlants);
+  // await database.rawQuery(Queries.queriesAllPlantLogs);
 
   // database
   runApp(
@@ -42,6 +44,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/main': (context) => MainPage(),
+        '/plants': (context) => PlantsPage(),
         '/new_plant': (context) => NewPlantPage(),
       },
     );

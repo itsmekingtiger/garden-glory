@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
@@ -80,6 +81,18 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
           ),
         ),
         onTap: () {
+          if (_controller.text.isEmpty) {
+            Fluttertoast.showToast(
+              msg: '식물 이름이 비어있습니다.',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
+            return;
+          }
           Navigator.of(context).popAndPushNamed(
             '/new_plant/set_watering',
             arguments: _WateringArgs(name: _controller.text),
@@ -187,6 +200,15 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
                   Navigator.of(context).pop();
                 } catch (e) {
                   _controller.clear();
+                  Fluttertoast.showToast(
+                    msg: 'Wrong input. Must be number',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
                 }
               },
             ),

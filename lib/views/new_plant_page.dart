@@ -185,6 +185,14 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as _WateringArgs;
 
+    void onSubmitted(int period) {
+      ref.read(plantListProvider.notifier).add(
+            name: args.name,
+            wateringEvery: period,
+          );
+      Navigator.of(context).pop();
+    }
+
     return Scaffold(
       appBar: MyAppBar(
         context,
@@ -232,8 +240,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
                 ),
               ),
               onTap: () {
-                ref.read(plantListProvider.notifier).add(name: _controller.text, wateringEvery: 0);
-                Navigator.of(context).pop();
+                onSubmitted(0);
               },
             ),
           ),
@@ -252,11 +259,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
                 try {
                   final period = int.parse(_controller.text);
 
-                  ref.read(plantListProvider.notifier).add(
-                        name: args.name,
-                        wateringEvery: period,
-                      );
-                  Navigator.of(context).pop();
+                  onSubmitted(period);
                 } catch (e) {
                   _controller.clear();
                   Fluttertoast.showToast(

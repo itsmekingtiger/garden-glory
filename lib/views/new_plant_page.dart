@@ -40,18 +40,22 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
             GestureDetector(
               onTap: () async {
                 showModalBottomSheet(
+                  backgroundColor: Colors.transparent,
                   context: context,
-                  builder: (context) => BottomSheet(
-                    onClosing: () {},
-                    builder: (context) {
-                      // Pick image from gallery/camera
-                      return SizedBox(
-                        height: 200,
-                        child: Column(
+                  builder: (context) => Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: BottomSheet(
+                      shape: RoundedRectangleBorder(borderRadius: Corners.lgBorder),
+                      onClosing: () {},
+                      builder: (context) {
+                        // Pick image from gallery/camera
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             ListTile(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Corners.lgRadius)),
                               leading: Icon(Icons.camera_alt),
-                              title: Text('Camera'),
+                              title: Text('카메라'),
                               onTap: () async {
                                 Navigator.pop(context);
                                 var _file = await _picker.pickImage(source: ImageSource.camera);
@@ -59,8 +63,10 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
                               },
                             ),
                             ListTile(
+                              shape:
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Corners.lgRadius)),
                               leading: Icon(Icons.image),
-                              title: Text('Gallery'),
+                              title: Text('갤러리'),
                               onTap: () async {
                                 Navigator.pop(context);
                                 setState(() async {
@@ -70,29 +76,46 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
                               },
                             ),
                           ],
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 );
               },
-              child: SizedBox(
-                width: 150,
-                height: 150,
-                child: file == null
-                    ? GestureDetector(
-                        child: Container(color: Colors.black),
-                      )
-                    : FutureBuilder(
-                        future: file?.readAsBytes(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Image.memory(snapshot.data!);
-                          } else {
-                            return const Placeholder(color: Colors.red);
-                          }
-                        },
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: file == null
+                        ? GestureDetector(
+                            child: Container(color: Colors.black),
+                          )
+                        : FutureBuilder(
+                            future: file?.readAsBytes(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Image.memory(snapshot.data!);
+                              } else {
+                                return const Placeholder(color: Colors.red);
+                              }
+                            },
+                          ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
                       ),
+                      child: Icon(Icons.add),
+                    ),
+                  ),
+                ],
               ),
             ),
             VSpace.md,
@@ -101,6 +124,7 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
             DecoInput(
               controller: _controller,
               maxWith: 200,
+              hintText: '식물 이름',
             ),
           ],
         ),

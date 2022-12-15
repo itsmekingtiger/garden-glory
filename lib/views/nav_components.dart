@@ -42,7 +42,7 @@ class BottomNavBar extends StatelessWidget {
         },
         // ignore: prefer_const_literals_to_create_immutables
         items: [
-          const BottomNavigationBarItem(icon: Icon(Icons.mail_rounded), label: '홈'),
+          const BottomNavigationBarItem(icon: Icon(CupertinoIcons.sparkles), label: '홈'),
           const BottomNavigationBarItem(icon: Icon(CupertinoIcons.tree), label: '내 식물'),
           const BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar), label: '캘린더'),
         ]);

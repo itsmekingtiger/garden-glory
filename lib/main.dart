@@ -2,6 +2,7 @@ import 'package:brown_brown/database/database_init.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/views/main_page.dart';
 import 'package:brown_brown/views/new_plant_page.dart';
+import 'package:brown_brown/views/plant_detail_page%20copy.dart';
 import 'package:brown_brown/views/plants_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/main': (context) => MainPage(),
         '/plants': (context) => PlantsPage(),
         '/new_plant': (context) => NewPlantPage(),
+        '/plant_detail': (context) => PlantsDetailPage(),
       },
     );
   }

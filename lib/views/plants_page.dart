@@ -67,38 +67,52 @@ class PlantsPage extends ConsumerWidget {
             child: ListView.builder(
               itemCount: plants.length,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.all(10),
-                          child: Row(
-                            children: [
-                              CircleAvatar(),
-                              // name, species, last event
-                              HSpace.md,
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    plants[index].name,
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
+                return GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/plant_detail'),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+                                CircleAvatar(),
+                                // name, species, last event
+                                HSpace.md,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        plants[index].name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('오늘/어제/n일전, last event title here',
+                                          style: Theme.of(context).textTheme.bodySmall),
+                                    ],
                                   ),
-                                  Text('오늘/어제/n일전, last event title here',
-                                      style: Theme.of(context).textTheme.bodySmall),
-                                ],
-                              ),
-                            ],
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    // write log
+                                  },
+                                  icon: Icon(CupertinoIcons.pencil_outline),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },

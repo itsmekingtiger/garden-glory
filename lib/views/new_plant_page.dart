@@ -1,6 +1,8 @@
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/inputs.dart';
 import 'package:brown_brown/ui/styles.dart';
+import 'package:brown_brown/views/nav_components.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,21 +24,15 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MyAppBar(
+        context,
+        'Brown Brown',
+      ),
       body: Center(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // title
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '새로운 식물을 등록해주세요',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
 
             // profile image
             Container(
@@ -47,8 +43,7 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
                       child: const Placeholder(color: Colors.green),
                       onTap: () async {
                         setState(() async {
-                          file = await _picker.pickImage(
-                              source: ImageSource.camera);
+                          file = await _picker.pickImage(source: ImageSource.camera);
                         });
                       },
                     )
@@ -80,16 +75,11 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
           alignment: Alignment.center,
           child: Text(
             '다음',
-            style: Theme.of(context)
-                .textTheme
-                .headline6!
-                .copyWith(color: Colors.white),
+            style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
           ),
         ),
         onTap: () {
-          ref
-              .read(plantListProvider.notifier)
-              .add(name: _controller.text, wateringEvery: 0);
+          ref.read(plantListProvider.notifier).add(name: _controller.text, wateringEvery: 0);
           Navigator.of(context).pop();
         },
       ),
@@ -111,15 +101,12 @@ class _ProfilePreviewState extends State<ProfilePreview> {
       children: [
         Container(
           margin: const EdgeInsets.all(100.0),
-          decoration:
-              const BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+          decoration: const BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
         ),
         Container(
           margin: const EdgeInsets.all(20.0),
-          decoration: BoxDecoration(
-              color: Colors.orange,
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white)),
+          decoration:
+              BoxDecoration(color: Colors.orange, shape: BoxShape.circle, border: Border.all(color: Colors.white)),
         ),
       ],
     );

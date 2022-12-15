@@ -7,27 +7,25 @@ AppBar MyAppBar(BuildContext context, String title) {
     elevation: 0,
     // backgroundColor: Colors.transparent,
     leading: IconButton(
-      icon: Icon(Icons.menu),
-      onPressed: () => Scaffold.of(context).openDrawer(),
+      icon: Icon(Icons.chevron_left),
+      onPressed: () => Navigator.of(context).pop(),
     ),
     title: Text(title),
-    actions: [
-      IconButton(
-        icon: Icon(Icons.search),
-        onPressed: () {},
-      ),
-    ],
   );
 }
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({
+  const BottomNavBar(
+    this.currentIndex, {
     Key? key,
   }) : super(key: key);
+
+  final int currentIndex;
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+        currentIndex: currentIndex,
         onTap: (value) {
           switch (value) {
             case 0:
@@ -42,10 +40,11 @@ class BottomNavBar extends StatelessWidget {
             default:
           }
         },
+        // ignore: prefer_const_literals_to_create_immutables
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.mail_rounded), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.tree), label: '내 식물'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar), label: '캘린더'),
+          const BottomNavigationBarItem(icon: Icon(Icons.mail_rounded), label: '홈'),
+          const BottomNavigationBarItem(icon: Icon(CupertinoIcons.tree), label: '내 식물'),
+          const BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar), label: '캘린더'),
         ]);
   }
 }

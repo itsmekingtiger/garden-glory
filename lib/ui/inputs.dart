@@ -13,6 +13,7 @@ class DecoInput extends StatefulWidget {
     this.keyboardType,
     this.autoFocus = false,
     this.maxLength,
+    this.textAlign = TextAlign.start,
   }) : super(key: key);
 
   final double maxWith;
@@ -23,6 +24,7 @@ class DecoInput extends StatefulWidget {
   final TextInputType? keyboardType;
   final bool autoFocus;
   final int? maxLength;
+  final TextAlign textAlign;
 
   @override
   _DecoInputState createState() => _DecoInputState();
@@ -57,6 +59,7 @@ class _DecoInputState extends State<DecoInput> {
           color: focusNode!.hasFocus ? Colors.white : Colors.grey[200],
         ),
         child: TextField(
+          textAlign: widget.textAlign,
           keyboardType: widget.keyboardType,
           controller: widget.controller,
           focusNode: focusNode,
@@ -87,6 +90,5 @@ class _DecoInputState extends State<DecoInput> {
     );
   }
 
-  TextSelection get _allSelection => TextSelection(
-      baseOffset: 0, extentOffset: widget.controller!.text.length);
+  TextSelection get _allSelection => TextSelection(baseOffset: 0, extentOffset: widget.controller!.text.length);
 }

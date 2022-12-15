@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/main': (context) => MainPage(),
         '/plants': (context) => PlantsPage(),
         '/new_plant': (context) => NewPlantPage(),
+        '/new_plant/set_watering': (context) => NewPlanSetWateringPage(),
         '/plant_detail': (context) => PlantsDetailPage(),
       },
     );

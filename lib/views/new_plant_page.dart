@@ -1,9 +1,9 @@
+import 'dart:io';
+
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/inputs.dart';
 import 'package:brown_brown/ui/styles.dart';
 import 'package:brown_brown/views/nav_components.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -87,20 +87,10 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
                   SizedBox(
                     width: 150,
                     height: 150,
-                    child: file == null
-                        ? GestureDetector(
-                            child: Container(color: Colors.black),
-                          )
-                        : FutureBuilder(
-                            future: file?.readAsBytes(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Image.memory(snapshot.data!);
-                              } else {
-                                return const Placeholder(color: Colors.red);
-                              }
-                            },
-                          ),
+                    child: CircleAvatar(
+                      maxRadius: 150,
+                      backgroundImage: file == null ? null : FileImage(File(file!.path)),
+                    ),
                   ),
                   Positioned(
                     bottom: 0,
@@ -154,7 +144,7 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
           }
           Navigator.of(context).popAndPushNamed(
             '/new_plant/set_watering',
-            arguments: _WateringArgs(name: _controller.text),
+            arguments: _WateringArgs(name: _controller.text, image_path: file?.path),
           );
         },
       ),
@@ -165,9 +155,11 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
 @immutable
 class _WateringArgs {
   final String name;
+  final String? image_path;
 
   const _WateringArgs({
     required this.name,
+    this.image_path,
   });
 }
 
@@ -189,6 +181,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
       ref.read(plantListProvider.notifier).add(
             name: args.name,
             wateringEvery: period,
+            // TODO: 프로필 이미지
           );
       Navigator.of(context).pop();
     }
@@ -277,32 +270,6 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
           ),
         ],
       ),
-    );
-  }
-}
-
-class ProfilePreview extends StatefulWidget {
-  const ProfilePreview({super.key});
-
-  @override
-  State<ProfilePreview> createState() => _ProfilePreviewState();
-}
-
-class _ProfilePreviewState extends State<ProfilePreview> {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          margin: const EdgeInsets.all(100.0),
-          decoration: const BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-        ),
-        Container(
-          margin: const EdgeInsets.all(20.0),
-          decoration:
-              BoxDecoration(color: Colors.orange, shape: BoxShape.circle, border: Border.all(color: Colors.white)),
-        ),
-      ],
     );
   }
 }

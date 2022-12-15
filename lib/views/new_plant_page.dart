@@ -37,28 +37,63 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
             // title
 
             // profile image
-            Container(
-              width: 150,
-              height: 150,
-              child: file == null
-                  ? GestureDetector(
-                      child: const Placeholder(color: Colors.green),
-                      onTap: () async {
-                        setState(() async {
-                          file = await _picker.pickImage(source: ImageSource.camera);
-                        });
-                      },
-                    )
-                  : FutureBuilder(
-                      future: file?.readAsBytes(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Image.memory(snapshot.data!);
-                        } else {
-                          return const Placeholder(color: Colors.red);
-                        }
-                      },
-                    ),
+            GestureDetector(
+              onTap: () async {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => BottomSheet(
+                    onClosing: () {},
+                    builder: (context) {
+                      // Pick image from gallery/camera
+                      return SizedBox(
+                        height: 200,
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: Icon(Icons.camera_alt),
+                              title: Text('Camera'),
+                              onTap: () async {
+                                Navigator.pop(context);
+                                var _file = await _picker.pickImage(source: ImageSource.camera);
+                                setState(() => file = _file);
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.image),
+                              title: Text('Gallery'),
+                              onTap: () async {
+                                Navigator.pop(context);
+                                setState(() async {
+                                  var _file = await _picker.pickImage(source: ImageSource.gallery);
+                                  setState(() => file = _file);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+              child: SizedBox(
+                width: 150,
+                height: 150,
+                child: file == null
+                    ? GestureDetector(
+                        child: Container(color: Colors.black),
+                      )
+                    : FutureBuilder(
+                        future: file?.readAsBytes(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Image.memory(snapshot.data!);
+                          } else {
+                            return const Placeholder(color: Colors.red);
+                          }
+                        },
+                      ),
+              ),
             ),
             VSpace.md,
 

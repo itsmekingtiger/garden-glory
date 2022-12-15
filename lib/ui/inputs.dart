@@ -13,6 +13,7 @@ class DecoInput extends StatefulWidget {
     this.keyboardType,
     this.autoFocus = false,
     this.maxLength,
+    this.hintText,
     this.textAlign = TextAlign.start,
   }) : super(key: key);
 
@@ -25,6 +26,7 @@ class DecoInput extends StatefulWidget {
   final bool autoFocus;
   final int? maxLength;
   final TextAlign textAlign;
+  final String? hintText;
 
   @override
   _DecoInputState createState() => _DecoInputState();
@@ -64,6 +66,7 @@ class _DecoInputState extends State<DecoInput> {
           controller: widget.controller,
           focusNode: focusNode,
           decoration: InputDecoration(
+            hintText: widget.hintText,
             focusedBorder: OutlineInputBorder(
               borderRadius: Corners.smBorder,
               borderSide: BorderSide(color: Colors.blueAccent[100]!, width: 3),

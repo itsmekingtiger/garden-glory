@@ -1,10 +1,35 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:brown_brown/views/main_page.dart';
 import 'package:brown_brown/views/plants_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-AppBar MyAppBar(BuildContext context, String title) {
+AppBar TopLevelAppBar(BuildContext context, String title) {
+  return AppBar(
+    elevation: 0,
+    backgroundColor: Colors.transparent,
+
+    // Open drawer
+    leading: Builder(
+      builder: (BuildContext context) {
+        return IconButton(
+          icon: Icon(Icons.menu, color: Theme.of(context).primaryColor),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+        );
+      },
+    ),
+
+    // TODO: App logo
+    title: Text(title, style: Theme.of(context).textTheme.headline4),
+  );
+}
+
+AppBar SubPageAppBar(BuildContext context, String title) {
   return AppBar(
     elevation: 0,
     // backgroundColor: Colors.transparent,

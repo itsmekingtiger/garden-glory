@@ -13,7 +13,7 @@ class PlantDetailPage extends ConsumerWidget {
     final List<Plant> plants = ref.watch(plantListProvider);
 
     return Scaffold(
-      appBar: MyAppBar(context, 'name'),
+      appBar: SubPageAppBar(context, 'name'),
       body: Column(
         children: [
           // profile

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/views/nav_components.dart';
@@ -6,15 +8,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MainPage extends ConsumerWidget {
   static const pageUrl = '/main';
-
-  const MainPage({super.key});
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final List<Plant> plants = ref.watch(plantListProvider);
 
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(0),
+      key: _scaffoldKey,
+      appBar: TopLevelAppBar(context, 'BrownBrown'),
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  child: Text('Drawer Header'),
+                ),
+                ListTile(title: Text('설정'), onTap: () {}),
+                ListTile(title: Text('로그'), onTap: () {}),
+
+                // Import and Export
+              ],
+            ),
+
+            // Server Client State
+          ],
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -25,10 +49,10 @@ class MainPage extends ConsumerWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavBar(0),
     );
   }
 }
-
 
 // class WateringNotificationSection extends StatelessWidget {
 //   const WateringNotificationSection(int plantId, {super.key});

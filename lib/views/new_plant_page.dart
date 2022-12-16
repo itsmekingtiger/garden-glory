@@ -29,7 +29,7 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: SubPageAppBar(
         context,
         'Brown Brown',
       ),
@@ -200,7 +200,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
     }
 
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: SubPageAppBar(
         context,
         'Brown Brown',
       ),

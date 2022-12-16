@@ -33,7 +33,7 @@ class PlantLogEditPage extends ConsumerWidget {
     final List<Plant> plants = ref.watch(plantListProvider);
 
     return Scaffold(
-      appBar: MyAppBar(context, '오늘의 기록'),
+      appBar: SubPageAppBar(context, '오늘의 기록'),
       body: Column(
         children: [
           Text(

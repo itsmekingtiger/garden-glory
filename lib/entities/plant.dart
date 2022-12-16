@@ -22,7 +22,7 @@ class Plant {
     if (wateringEvery == 0) return false;
 
     final lastWatering = logs
-        .where((log) => log.logType.contains(logTypeWatering))
+        .where((log) => log.logType.contains(TagType.watering))
         .map((log) => log.createdAt)
         .reduce((value, element) => value.isAfter(element) ? value : element);
     final nextWatering = lastWatering.add(Duration(days: wateringEvery));
@@ -30,23 +30,28 @@ class Plant {
   }
 }
 
-const String logTypeWatering = 'watering';
-const String logTypeSeeding = 'seeding';
-const String logTypeGerminated = 'germinated';
-const String logTypePotChanging = 'potChanging';
-const String logTypeToday = 'today';
-const String logTypeNewLeaf = 'newLeaf';
-const String logTypeFlower = 'flower';
-const String logTypeSuffering = 'suffering';
-const String logTypeFeeding = 'feeding';
-const String logTypeOther = 'other';
+enum TagType {
+  watering(0xFF6680B3),
+  seeding(0xFF66994D),
+  germinated(0xFF00E680),
+  potChanging(0xFF999933),
+  today(0xFF00B3E6),
+  newLeaf(0xFF66E64D),
+  flower(0xFFFFFF99),
+  suffering(0xFF991AFF),
+  feeding(0xFF999966);
+
+  const TagType(this.color);
+
+  final int color;
+}
 
 @immutable
 class PlantLog {
   final String id;
   final String title;
   final String description;
-  final List<String> logType;
+  final Set<TagType> logType;
   final DateTime createdAt;
 
   const PlantLog({

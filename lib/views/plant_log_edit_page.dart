@@ -16,56 +16,56 @@ enum LogEditMode {
 }
 
 List<Color> colorArray = [
-  Color(0xFFFF6633),
-  Color(0xFFFFB399),
-  Color(0xFFFF33FF),
-  Color(0xFFFFFF99),
   Color(0xFF00B3E6),
-  Color(0xFFE6B333),
+  Color(0xFF00E680),
+  Color(0xFF1AB399),
+  Color(0xFF1AFF33),
   Color(0xFF3366E6),
-  Color(0xFF999966),
-  Color(0xFF99FF99),
-  Color(0xFFB34D4D),
-  Color(0xFF80B300),
-  Color(0xFF809900),
-  Color(0xFFE6B3B3),
+  Color(0xFF33991A),
+  Color(0xFF33FFCC),
+  Color(0xFF4D8000),
+  Color(0xFF4D8066),
+  Color(0xFF4D80CC),
+  Color(0xFF4DB380),
+  Color(0xFF4DB3FF),
+  Color(0xFF66664D),
+  Color(0xFF6666FF),
   Color(0xFF6680B3),
   Color(0xFF66991A),
-  Color(0xFFFF99E6),
-  Color(0xFFCCFF1A),
-  Color(0xFFFF1A66),
-  Color(0xFFE6331A),
-  Color(0xFF33FFCC),
   Color(0xFF66994D),
-  Color(0xFFB366CC),
-  Color(0xFF4D8000),
-  Color(0xFFB33300),
-  Color(0xFFCC80CC),
-  Color(0xFF66664D),
-  Color(0xFF991AFF),
-  Color(0xFFE666FF),
-  Color(0xFF4DB3FF),
-  Color(0xFF1AB399),
-  Color(0xFFE666B3),
-  Color(0xFF33991A),
-  Color(0xFFCC9999),
-  Color(0xFFB3B31A),
-  Color(0xFF00E680),
-  Color(0xFF4D8066),
-  Color(0xFF809980),
-  Color(0xFFE6FF80),
-  Color(0xFF1AFF33),
-  Color(0xFF999933),
-  Color(0xFFFF3380),
-  Color(0xFFCCCC00),
   Color(0xFF66E64D),
-  Color(0xFF4D80CC),
+  Color(0xFF809900),
+  Color(0xFF809980),
+  Color(0xFF80B300),
   Color(0xFF9900B3),
-  Color(0xFFE64D66),
-  Color(0xFF4DB380),
-  Color(0xFFFF4D4D),
+  Color(0xFF991AFF),
+  Color(0xFF999933),
+  Color(0xFF999966),
   Color(0xFF99E6E6),
-  Color(0xFF6666FF)
+  Color(0xFF99FF99),
+  Color(0xFFB33300),
+  Color(0xFFB34D4D),
+  Color(0xFFB366CC),
+  Color(0xFFB3B31A),
+  Color(0xFFCC80CC),
+  Color(0xFFCC9999),
+  Color(0xFFCCCC00),
+  Color(0xFFCCFF1A),
+  Color(0xFFE6331A),
+  Color(0xFFE64D66),
+  Color(0xFFE666B3),
+  Color(0xFFE666FF),
+  Color(0xFFE6B333),
+  Color(0xFFE6B3B3),
+  Color(0xFFE6FF80),
+  Color(0xFFFF1A66),
+  Color(0xFFFF3380),
+  Color(0xFFFF33FF),
+  Color(0xFFFF4D4D),
+  Color(0xFFFF6633),
+  Color(0xFFFF99E6),
+  Color(0xFFFFB399),
+  Color(0xFFFFFF99),
 ];
 
 /// [Determine If A Color Is Bright Or Dark Using JavaScript - Andreas Wik](https://awik.io/determine-color-bright-dark-using-javascript/)
@@ -95,6 +95,16 @@ class _DateTimeNotifier extends StateNotifier<DateTime> {
 
 final _dateTimeProvider = StateNotifierProvider<_DateTimeNotifier, DateTime>((ref) => _DateTimeNotifier());
 
+class _TagNotifier extends StateNotifier<Set<TagType>> {
+  _TagNotifier() : super(<TagType>{});
+
+  void on(TagType tagType) => state.add(tagType);
+
+  void off(TagType tagType) => state.remove(tagType);
+}
+
+final _tagProvider = StateNotifierProvider<_TagNotifier, Set<TagType>>((ref) => _TagNotifier());
+
 class PlantLogEditPage extends ConsumerWidget {
   static const pageUrl = '/plant_log_edit';
   PlantLogEditPage({super.key});
@@ -106,12 +116,6 @@ class PlantLogEditPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final plant = args['plant'] as Plant;
-
-    final List<String> tags = [
-      'Watering',
-      'Feeding',
-      'Suffering',
-    ];
 
     Future<void> onSubmitted() async {
       final editMode = args['mode'] as LogEditMode;
@@ -155,7 +159,7 @@ class PlantLogEditPage extends ConsumerWidget {
             },
           ),
 
-          /* // 내용
+          // 내용
           Padding(
             padding: EdgeInsets.all(10),
             child: TextField(
@@ -169,7 +173,7 @@ class PlantLogEditPage extends ConsumerWidget {
               maxLines: 20,
             ),
           ),
-      
+
           // 태그, 사진
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -185,18 +189,20 @@ class PlantLogEditPage extends ConsumerWidget {
                       children: [
                         TextButton(
                           child: Text('태그 추가'),
-                          onPressed: () {},
+                          onPressed: () async {
+                            // TODO: 태그 추가
+                          },
                         ),
-                        ...tags.map((tag) {
-                          final colorRaw = tag.codeUnits.reduce((value, element) => value + element) | 0xFF000000;
-                          final color = colorArray[colorRaw % colorArray.length];
-                          final rgb = toRGB(color.value);
+                        ...ref.watch(_tagProvider).map((tag) {
+                          final colorRaw = tag.color;
+                          final color = Color(colorRaw);
+                          final rgb = toRGB(colorRaw);
                           final isLight = isLightColor(rgb[0], rgb[1], rgb[2]);
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 3),
                             child: Chip(
                               key: ValueKey(tag),
-                              label: Text(tag, style: TextStyle(color: isLight ? Colors.grey[800] : Colors.white)),
+                              label: Text(tag.name, style: TextStyle(color: isLight ? Colors.grey[800] : Colors.white)),
                               deleteIconColor: isLight ? Colors.grey[800] : Colors.white,
                               onDeleted: () {},
                               backgroundColor: color,
@@ -214,26 +220,24 @@ class PlantLogEditPage extends ConsumerWidget {
                 ],
               ),
             ),
-          ), */
+          ),
         ],
       ),
 
       //
-      bottomSheet: Expanded(
-        child: GestureDetector(
-          child: Container(
-            height: 50,
-            color: Theme.of(context).primaryColor,
-            alignment: Alignment.center,
-            child: Text(
-              '작성',
-              style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
-            ),
+      bottomSheet: GestureDetector(
+        child: Container(
+          height: 50,
+          color: Theme.of(context).primaryColor,
+          alignment: Alignment.center,
+          child: Text(
+            '작성',
+            style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
           ),
-          onTap: () {
-            // TODO:
-          },
         ),
+        onTap: () {
+          // TODO:
+        },
       ),
     );
   }

@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
+import 'package:brown_brown/ui/styles.dart';
 import 'package:brown_brown/views/nav_components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +14,93 @@ enum LogEditMode {
   edit,
 }
 
+List<Color> colorArray = [
+  Color(0xFFFF6633),
+  Color(0xFFFFB399),
+  Color(0xFFFF33FF),
+  Color(0xFFFFFF99),
+  Color(0xFF00B3E6),
+  Color(0xFFE6B333),
+  Color(0xFF3366E6),
+  Color(0xFF999966),
+  Color(0xFF99FF99),
+  Color(0xFFB34D4D),
+  Color(0xFF80B300),
+  Color(0xFF809900),
+  Color(0xFFE6B3B3),
+  Color(0xFF6680B3),
+  Color(0xFF66991A),
+  Color(0xFFFF99E6),
+  Color(0xFFCCFF1A),
+  Color(0xFFFF1A66),
+  Color(0xFFE6331A),
+  Color(0xFF33FFCC),
+  Color(0xFF66994D),
+  Color(0xFFB366CC),
+  Color(0xFF4D8000),
+  Color(0xFFB33300),
+  Color(0xFFCC80CC),
+  Color(0xFF66664D),
+  Color(0xFF991AFF),
+  Color(0xFFE666FF),
+  Color(0xFF4DB3FF),
+  Color(0xFF1AB399),
+  Color(0xFFE666B3),
+  Color(0xFF33991A),
+  Color(0xFFCC9999),
+  Color(0xFFB3B31A),
+  Color(0xFF00E680),
+  Color(0xFF4D8066),
+  Color(0xFF809980),
+  Color(0xFFE6FF80),
+  Color(0xFF1AFF33),
+  Color(0xFF999933),
+  Color(0xFFFF3380),
+  Color(0xFFCCCC00),
+  Color(0xFF66E64D),
+  Color(0xFF4D80CC),
+  Color(0xFF9900B3),
+  Color(0xFFE64D66),
+  Color(0xFF4DB380),
+  Color(0xFFFF4D4D),
+  Color(0xFF99E6E6),
+  Color(0xFF6666FF)
+];
+
+/// [Determine If A Color Is Bright Or Dark Using JavaScript - Andreas Wik](https://awik.io/determine-color-bright-dark-using-javascript/)
+bool isLightColor(int r, int g, int b) {
+  // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+  final hsp = sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
+
+  // Using the HSP value, determine whether the color is light or dark
+  return hsp > 127.5;
+}
+
+List<int> toRGB(int color) {
+  return [
+    (color >> 16) & 0xFF, // red
+    (color >> 8) & 0xFF, // green
+    color & 0xFF, // blue
+  ];
+}
+
 class PlantLogEditPage extends ConsumerWidget {
   static const pageUrl = '/plant_log_edit';
-  const PlantLogEditPage({super.key});
+  PlantLogEditPage({super.key});
+
+  DateTime _selectedDate = DateTime.now();
+  DateTime firstDate = DateTime.now().subtract(Duration(days: 365));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final plant = args['plant'] as Plant;
+
+    final List<String> tags = [
+      'Watering',
+      'Feeding',
+      'Suffering',
+    ];
 
     Future<void> onSubmitted() async {
       final editMode = args['mode'] as LogEditMode;
@@ -35,22 +117,31 @@ class PlantLogEditPage extends ConsumerWidget {
     return Scaffold(
       appBar: SubPageAppBar(context, '오늘의 기록'),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            '${plant.name}에게 어떤 일이 있었나요?',
-            style: Theme.of(context).textTheme.headline5,
+          VSpace.md,
+          ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20),
+            leading: CircleAvatar(
+              backgroundImage: plant.profileImage == null ? null : FileImage(plant.profileImage!),
+            ),
+            title: Text(plant.name),
+            subtitle: Text(
+              _selectedDate.toIso8601String(),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            onTap: () async {
+              // TODO: datepicker
+              await showDatePicker(
+                context: context,
+                initialDate: _selectedDate,
+                firstDate: firstDate,
+                lastDate: DateTime.now(),
+              );
+            },
           ),
 
-          // 날짜
-          // DatePickerDialog(
-          //   initialDate: DateTime.now(),
-          //   firstDate: DateTime.now().subtract(Duration(days: 365)),
-          //   lastDate: DateTime.now(),
-          // ),
-
-          // 타입
-
-          // 내용
+          /* // 내용
           Padding(
             padding: EdgeInsets.all(10),
             child: TextField(
@@ -64,20 +155,52 @@ class PlantLogEditPage extends ConsumerWidget {
               maxLines: 20,
             ),
           ),
-
-          // 사진
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: IconButton(
-                  icon: Icon(CupertinoIcons.camera),
-                  onPressed: () {},
-                ),
-              )
-            ],
-          ),
+      
+          // 태그, 사진
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SizedBox(
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        TextButton(
+                          child: Text('태그 추가'),
+                          onPressed: () {},
+                        ),
+                        ...tags.map((tag) {
+                          final colorRaw = tag.codeUnits.reduce((value, element) => value + element) | 0xFF000000;
+                          final color = colorArray[colorRaw % colorArray.length];
+                          final rgb = toRGB(color.value);
+                          final isLight = isLightColor(rgb[0], rgb[1], rgb[2]);
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 3),
+                            child: Chip(
+                              key: ValueKey(tag),
+                              label: Text(tag, style: TextStyle(color: isLight ? Colors.grey[800] : Colors.white)),
+                              deleteIconColor: isLight ? Colors.grey[800] : Colors.white,
+                              onDeleted: () {},
+                              backgroundColor: color,
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    constraints: BoxConstraints.tightFor(width: 40, height: 40),
+                    icon: Icon(CupertinoIcons.camera),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ),
+          ), */
         ],
       ),
 

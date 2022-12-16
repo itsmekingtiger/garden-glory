@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:brown_brown/images/image_manger.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/inputs.dart';
 import 'package:brown_brown/ui/styles.dart';
@@ -69,10 +70,8 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
                               title: Text('갤러리'),
                               onTap: () async {
                                 Navigator.pop(context);
-                                setState(() async {
-                                  var _file = await _picker.pickImage(source: ImageSource.gallery);
-                                  setState(() => file = _file);
-                                });
+                                var _file = await _picker.pickImage(source: ImageSource.gallery);
+                                setState(() => file = _file);
                               },
                             ),
                           ],
@@ -177,12 +176,22 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as _WateringArgs;
 
-    void onSubmitted(int period) {
+    Future<void> createNewPlant(int period) async {
+      File? profileImage;
+
+      if (args.image_path != null && args.image_path!.isNotEmpty) {
+        profileImage = await imageManager.save(File(args.image_path!));
+      }
+
       ref.read(plantListProvider.notifier).add(
             name: args.name,
             wateringEvery: period,
-            // TODO: 프로필 이미지
+            profileImage: profileImage,
           );
+
+      // FIXME: Is it safe approach?
+      // [flutter - Do not use BuildContexts across async gaps - Stack Overflow](https://stackoverflow.com/questions/68871880)
+      if (!mounted) return;
       Navigator.of(context).pop();
     }
 
@@ -233,7 +242,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
                 ),
               ),
               onTap: () {
-                onSubmitted(0);
+                createNewPlant(0);
               },
             ),
           ),
@@ -252,7 +261,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
                 try {
                   final period = int.parse(_controller.text);
 
-                  onSubmitted(period);
+                  createNewPlant(period);
                 } catch (e) {
                   _controller.clear();
                   Fluttertoast.showToast(

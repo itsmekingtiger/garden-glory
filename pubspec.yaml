@@ -17,6 +17,7 @@ dependencies:
   image_picker: ^0.8.0
   path_provider: ^2.0.0
   uuid: ^3.0.0
+  path: ^1.8.0
 
   # river pod
   flutter_riverpod: ^2.0.0

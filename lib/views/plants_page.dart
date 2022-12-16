@@ -82,7 +82,11 @@ class PlantsPage extends ConsumerWidget {
                             margin: EdgeInsets.all(10),
                             child: Row(
                               children: [
-                                CircleAvatar(),
+                                CircleAvatar(
+                                  backgroundImage: plants[index].profileImage == null
+                                      ? null
+                                      : FileImage(plants[index].profileImage!),
+                                ),
                                 // name, species, last event
                                 HSpace.md,
                                 Expanded(

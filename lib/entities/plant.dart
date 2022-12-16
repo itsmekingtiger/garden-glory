@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
@@ -6,12 +8,14 @@ class Plant {
   final String name;
   final List<PlantLog> logs;
   final int wateringEvery;
+  final File? profileImage;
 
   const Plant({
     required this.id,
     required this.name,
     required this.logs,
     required this.wateringEvery,
+    this.profileImage,
   });
 
   bool needToWatering(DateTime today) {

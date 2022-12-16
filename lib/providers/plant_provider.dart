@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:brown_brown/entities/plant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -21,6 +23,7 @@ class PlantList extends StateNotifier<List<Plant>> {
   void add({
     required String name,
     required int wateringEvery,
+    File? profileImage,
   }) {
     state = [
       ...state,
@@ -29,6 +32,7 @@ class PlantList extends StateNotifier<List<Plant>> {
         name: name,
         logs: const [],
         wateringEvery: 0,
+        profileImage: profileImage,
       ),
     ];
   }
@@ -37,6 +41,7 @@ class PlantList extends StateNotifier<List<Plant>> {
     required String id,
     String? name,
     int? wateringEvery,
+    File? profileImage,
   }) {
     state = [
       for (final plant in state)
@@ -46,6 +51,7 @@ class PlantList extends StateNotifier<List<Plant>> {
             name: name ?? plant.name,
             logs: plant.logs,
             wateringEvery: wateringEvery ?? plant.wateringEvery,
+            profileImage: profileImage ?? plant.profileImage,
           )
         else
           plant,

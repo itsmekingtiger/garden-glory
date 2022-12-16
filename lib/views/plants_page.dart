@@ -2,6 +2,8 @@ import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/styles.dart';
 import 'package:brown_brown/views/nav_components.dart';
+import 'package:brown_brown/views/new_plant_page.dart';
+import 'package:brown_brown/views/plant_log_eit_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -111,6 +113,13 @@ class PlantsPage extends ConsumerWidget {
                                 ),
                                 IconButton(
                                   onPressed: () {
+                                    Navigator.of(context).pushNamed(
+                                      PlantLogEditPage.pageUrl,
+                                      arguments: {
+                                        'plant': plants[index],
+                                        'mode': LogEditMode.add,
+                                      },
+                                    );
                                     // write log
                                   },
                                   icon: Icon(CupertinoIcons.pencil_outline),

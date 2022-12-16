@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 enum LogEditMode {
   add,
@@ -84,12 +85,22 @@ List<int> toRGB(int color) {
   ];
 }
 
+class _DateTimeNotifier extends StateNotifier<DateTime> {
+  _DateTimeNotifier() : super(DateTime.now());
+
+  void setDate(DateTime date) {
+    state = date;
+  }
+}
+
+final _dateTimeProvider = StateNotifierProvider<_DateTimeNotifier, DateTime>((ref) => _DateTimeNotifier());
+
 class PlantLogEditPage extends ConsumerWidget {
   static const pageUrl = '/plant_log_edit';
   PlantLogEditPage({super.key});
 
-  DateTime _selectedDate = DateTime.now();
-  DateTime firstDate = DateTime.now().subtract(Duration(days: 365));
+  final DateTime now = DateTime.now();
+  late final DateTime firstDate = now.subtract(Duration(days: 365));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -127,17 +138,20 @@ class PlantLogEditPage extends ConsumerWidget {
             ),
             title: Text(plant.name),
             subtitle: Text(
-              _selectedDate.toIso8601String(),
+              DateFormat('yyyy-MM-dd').format(ref.watch(_dateTimeProvider)),
               style: Theme.of(context).textTheme.bodySmall,
             ),
             onTap: () async {
-              // TODO: datepicker
-              await showDatePicker(
+              final date = await showDatePicker(
                 context: context,
-                initialDate: _selectedDate,
+                initialDate: ref.watch(_dateTimeProvider),
                 firstDate: firstDate,
-                lastDate: DateTime.now(),
+                lastDate: now,
               );
+
+              if (date != null) {
+                ref.watch(_dateTimeProvider.notifier).setDate(date);
+              }
             },
           ),
 

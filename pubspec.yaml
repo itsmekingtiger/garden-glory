@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.18.0 # format DateTime
 
   # Database
   # floor: ^1.3.0

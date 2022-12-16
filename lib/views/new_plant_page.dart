@@ -12,6 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
 class NewPlantPage extends ConsumerStatefulWidget {
+  static const pageUrl = '/new_plant';
+
   const NewPlantPage({Key? key}) : super(key: key);
 
   @override
@@ -142,7 +144,7 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
             return;
           }
           Navigator.of(context).popAndPushNamed(
-            '/new_plant/set_watering',
+            NewPlanSetWateringPage.pageUrl,
             arguments: _WateringArgs(name: _controller.text, image_path: file?.path),
           );
         },
@@ -163,6 +165,8 @@ class _WateringArgs {
 }
 
 class NewPlanSetWateringPage extends ConsumerStatefulWidget {
+  static const pageUrl = '/new_plant/set_watering';
+
   const NewPlanSetWateringPage({Key? key}) : super(key: key);
 
   @override

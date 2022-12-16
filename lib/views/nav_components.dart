@@ -1,3 +1,5 @@
+import 'package:brown_brown/views/main_page.dart';
+import 'package:brown_brown/views/plants_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,10 +31,10 @@ class BottomNavBar extends StatelessWidget {
         onTap: (value) {
           switch (value) {
             case 0:
-              Navigator.of(context).popAndPushNamed('/main');
+              Navigator.of(context).popAndPushNamed(MainPage.pageUrl);
               break;
             case 1:
-              Navigator.of(context).popAndPushNamed('/plants');
+              Navigator.of(context).popAndPushNamed(PlantsPage.pageUrl);
               break;
             // case 2:
             //   Navigator.of(context).popAndPushNamed('/main');

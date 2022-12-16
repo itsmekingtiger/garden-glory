@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PlantsPage extends ConsumerWidget {
+  static const pageUrl = '/plants';
+
+  const PlantsPage({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final List<Plant> plants = ref.watch(plantListProvider);

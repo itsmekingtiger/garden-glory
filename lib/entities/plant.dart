@@ -31,19 +31,20 @@ class Plant {
 }
 
 enum TagType {
-  watering(0xFF6680B3),
-  seeding(0xFF66994D),
-  germinated(0xFF00E680),
-  potChanging(0xFF999933),
-  today(0xFF00B3E6),
-  newLeaf(0xFF66E64D),
-  flower(0xFFFFFF99),
-  suffering(0xFF991AFF),
-  feeding(0xFF999966);
+  watering(0xFF6680B3, '물'),
+  seeding(0xFF66994D, '파종'),
+  germinated(0xFF00E680, '발아'),
+  potChanging(0xFF999933, '분갈이'),
+  today(0xFF00B3E6, '오늘'),
+  newLeaf(0xFF66E64D, '신엽'),
+  flower(0xFFFFFF99, '개화'),
+  suffering(0xFF991AFF, 'suffering(번역추천받음)'),
+  feeding(0xFF999966, '파종');
 
-  const TagType(this.color);
+  const TagType(this.color, this.translateKR);
 
   final int color;
+  final String translateKR;
 }
 
 @immutable

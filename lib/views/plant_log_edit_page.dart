@@ -98,9 +98,9 @@ final _dateTimeProvider = StateNotifierProvider<_DateTimeNotifier, DateTime>((re
 class _TagNotifier extends StateNotifier<Set<TagType>> {
   _TagNotifier() : super(<TagType>{});
 
-  void on(TagType tagType) => state.add(tagType);
+  void on(TagType tagType) => state = {...state, tagType};
 
-  void off(TagType tagType) => state.remove(tagType);
+  void off(TagType tagType) => state = {...state..remove(tagType)};
 }
 
 final _tagProvider = StateNotifierProvider<_TagNotifier, Set<TagType>>((ref) => _TagNotifier());
@@ -190,7 +190,14 @@ class PlantLogEditPage extends ConsumerWidget {
                         TextButton(
                           child: Text('태그 추가'),
                           onPressed: () async {
-                            // TODO: 태그 추가
+                            showModalBottomSheet(
+                              backgroundColor: Colors.transparent,
+                              context: context,
+                              builder: (context) => Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: TagBottomSheet(),
+                              ),
+                            );
                           },
                         ),
                         ...ref.watch(_tagProvider).map((tag) {
@@ -202,7 +209,8 @@ class PlantLogEditPage extends ConsumerWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 3),
                             child: Chip(
                               key: ValueKey(tag),
-                              label: Text(tag.name, style: TextStyle(color: isLight ? Colors.grey[800] : Colors.white)),
+                              label: Text(tag.translateKR,
+                                  style: TextStyle(color: isLight ? Colors.grey[800] : Colors.white)),
                               deleteIconColor: isLight ? Colors.grey[800] : Colors.white,
                               onDeleted: () {},
                               backgroundColor: color,
@@ -239,6 +247,68 @@ class PlantLogEditPage extends ConsumerWidget {
           // TODO:
         },
       ),
+    );
+  }
+}
+
+class TagBottomSheet extends ConsumerWidget {
+  const TagBottomSheet({
+    Key? key,
+  }) : super(key: key);
+
+  List<TagBottomSheetItem> drawItems(BuildContext context, WidgetRef ref) {
+    return TagType.values.map((e) {
+      final checked = ref.watch(_tagProvider).contains(e);
+
+      return TagBottomSheetItem(
+        e.translateKR,
+        trailing: checked ? Icon(Icons.check, color: Theme.of(context).primaryColor) : null,
+        onTap: () => checked ? ref.read(_tagProvider.notifier).off(e) : ref.watch(_tagProvider.notifier).on(e),
+      );
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return BottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: Corners.lgBorder),
+      onClosing: () {},
+      builder: (context) {
+        return ListView(
+          children: drawItems(context, ref),
+        );
+      },
+    );
+  }
+}
+
+class TagBottomSheetItem extends StatelessWidget {
+  const TagBottomSheetItem(
+    this.title, {
+    Key? key,
+    this.shape,
+    this.leading,
+    this.trailing,
+    this.subtitle,
+    this.onTap,
+  }) : super(key: key);
+
+  final ShapeBorder? shape;
+  final Widget? leading;
+  final Widget? trailing;
+  final String title;
+  final Widget? subtitle;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(title),
+      shape: shape,
+      leading: leading,
+      trailing: trailing,
+      subtitle: subtitle,
+      onTap: onTap,
     );
   }
 }

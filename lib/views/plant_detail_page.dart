@@ -1,5 +1,6 @@
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
+import 'package:brown_brown/ui/buttons.dart';
 import 'package:brown_brown/ui/styles.dart';
 import 'package:brown_brown/views/nav_components.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,10 @@ class PlantDetailPage extends ConsumerWidget {
                   children: [
                     Text(plant.name, style: Theme.of(context).textTheme.headline4),
                     Text('물주기: ${plant.wateringEvery.toString()}일', style: Theme.of(context).textTheme.bodyMedium),
+                    GloryTinyTextButton(
+                      onPressed: () => {},
+                      text: '물주기 수정하기',
+                    )
                   ],
                 ),
               ],

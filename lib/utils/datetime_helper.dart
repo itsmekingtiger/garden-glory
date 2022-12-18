@@ -32,5 +32,8 @@ String dateAgo(DateTime src, DateTime dst) {
   }
 }
 
+bool isSameDate(DateTime src, DateTime dst) => src.year == dst.year && src.month == dst.month && src.day == dst.day;
+bool isNotSameDate(DateTime src, DateTime dst) => !isSameDate(src, dst);
+
 DateTime endOfDay(DateTime dateTime) => DateTime(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59);
 final kEndOfToday = endOfDay(DateTime.now());

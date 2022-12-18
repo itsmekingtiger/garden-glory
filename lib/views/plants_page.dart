@@ -117,7 +117,10 @@ class BrownActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: callback,
+      onTap: () {
+        Feedback.forTap(context);
+        callback();
+      },
       child: SizedBox(
         height: 100,
         child: Row(

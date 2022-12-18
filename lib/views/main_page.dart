@@ -16,7 +16,7 @@ class MainPage extends ConsumerWidget {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: TopLevelAppBar(context, 'BrownBrown'),
+      appBar: TopLevelAppBar(context, 'Garden Glory'),
       drawer: Drawer(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

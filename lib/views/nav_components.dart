@@ -5,6 +5,7 @@ import 'package:brown_brown/views/plants_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 AppBar TopLevelAppBar(BuildContext context, String title) {
   return AppBar(
@@ -25,7 +26,12 @@ AppBar TopLevelAppBar(BuildContext context, String title) {
     ),
 
     // TODO: App logo
-    title: Text(title, style: Theme.of(context).textTheme.headline4),
+    title: Text(title,
+        style: GoogleFonts.poiretOne().copyWith(
+          fontSize: 36,
+          color: Colors.black,
+          // fontWeight: FontWeight.w800,
+        )),
   );
 }
 

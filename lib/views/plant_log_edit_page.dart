@@ -188,7 +188,7 @@ class PlantLogEditPage extends ConsumerWidget {
                       scrollDirection: Axis.horizontal,
                       children: [
                         TextButton(
-                          child: Text('태그 추가'),
+                          child: Text('태그 편집'),
                           onPressed: () async {
                             showModalBottomSheet(
                               backgroundColor: Colors.transparent,
@@ -208,11 +208,11 @@ class PlantLogEditPage extends ConsumerWidget {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 3),
                             child: Chip(
+                              visualDensity: VisualDensity.compact,
                               key: ValueKey(tag),
                               label: Text(tag.translateKR,
                                   style: TextStyle(color: isLight ? Colors.grey[800] : Colors.white)),
                               deleteIconColor: isLight ? Colors.grey[800] : Colors.white,
-                              onDeleted: () {},
                               backgroundColor: color,
                             ),
                           );

@@ -23,7 +23,7 @@ class Plant {
 
   PlantLog? mostRecentLog() => logs.isNotEmpty ? logs.last : null;
 
-  DateTime? get lastWatering => logs.lastWhereOrNull((log) => log.logType.contains(TagType.watering))?.createdAt;
+  DateTime? get lastWatering => logs.lastWhereOrNull((log) => log.tagType.contains(TagType.watering))?.createdAt;
   DateTime? get nextWatring => lastWatering?.add(Duration(days: wateringEvery));
 
   /// today Must have time 12:59:59
@@ -72,14 +72,14 @@ enum TagType {
 class PlantLog {
   final String id;
   final String text;
-  final Set<TagType> logType;
+  final Set<TagType> tagType;
   final DateTime createdAt;
   final File? image;
 
   const PlantLog({
     required this.id,
     required this.text,
-    required this.logType,
+    required this.tagType,
     required this.createdAt,
     required this.image,
   });
@@ -89,14 +89,14 @@ class PlantLog {
   PlantLog copyWith({
     String? id,
     String? text,
-    Set<TagType>? logType,
+    Set<TagType>? tagType,
     DateTime? createdAt,
     File? profileImage,
   }) {
     return PlantLog(
       id: id ?? this.id,
       text: text ?? this.text,
-      logType: logType ?? this.logType,
+      tagType: tagType ?? this.tagType,
       createdAt: createdAt ?? this.createdAt,
       image: profileImage ?? this.image,
     );

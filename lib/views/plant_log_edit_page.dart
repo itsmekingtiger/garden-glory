@@ -140,8 +140,6 @@ class _PlantLogEditPageState extends ConsumerState {
       }
     }
 
-    final List<Plant> plants = ref.watch(plantListProvider);
-
     return Scaffold(
       appBar: SubPageAppBar(context, '오늘의 기록'),
       body: Column(
@@ -266,7 +264,7 @@ class _PlantLogEditPageState extends ConsumerState {
           ref.watch(plantListProvider.notifier).addLog(
                 plantId: plant.id,
                 description: ctrl.text,
-                logType: ref.watch(_tagProvider),
+                tagType: ref.watch(_tagProvider),
                 createdAt: ref.watch(_dateTimeProvider),
                 image: file == null ? null : File(file!.path),
               );

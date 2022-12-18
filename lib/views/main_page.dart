@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/utils/datetime_helper.dart';
+import 'package:brown_brown/views/plant_detail_page.dart';
+import 'package:brown_brown/views/plant_log_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -30,7 +32,13 @@ class MainPage extends ConsumerWidget {
                       SlidableAction(
                         // An action can be bigger than the others.
                         flex: 1,
-                        onPressed: (context) {},
+                        onPressed: (context) => Navigator.of(context).pushNamed(
+                          PlantLogEditPage.pageUrl,
+                          arguments: {
+                            'plant': plant,
+                            'mode': LogEditMode.add,
+                          },
+                        ),
                         backgroundColor: Color(0xFF386641),
                         foregroundColor: Colors.white,
                         icon: Icons.edit_calendar_rounded,
@@ -38,7 +46,14 @@ class MainPage extends ConsumerWidget {
                       ),
                       SlidableAction(
                         flex: 1,
-                        onPressed: (context) {},
+                        onPressed: (context) {
+                          ref.watch(plantListProvider.notifier).addLog(
+                                plantId: plant.id,
+                                description: '물을 줬어요',
+                                tagType: {TagType.watering},
+                                createdAt: DateTime.now(),
+                              );
+                        },
                         backgroundColor: Color(0xFF6a994e),
                         foregroundColor: Colors.white,
                         icon: Icons.water_drop,

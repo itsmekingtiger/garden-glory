@@ -51,7 +51,7 @@ class PlantDetailPage extends ConsumerWidget {
                       backgroundImage: log.image == null ? null : FileImage(log.image!),
                     ),
                     title: Text(log.text, style: Theme.of(context).textTheme.bodyMedium),
-                    subtitle: Text('${log.date}, ${log.logType.map((e) => e.translateKR)}'),
+                    subtitle: Text('${log.date}, ${log.tagType.map((e) => e.translateKR)}'),
                   ))
               .toList(),
 

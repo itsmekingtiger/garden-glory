@@ -59,11 +59,11 @@ class PlantList extends StateNotifier<List<Plant>> {
   void addLog({
     required String plantId,
     required String description,
-    required Set<TagType> logType,
+    required Set<TagType> tagType,
     required DateTime createdAt,
-    required File? image,
+    File? image,
   }) {
-    final log = PlantLog(id: _uuid.v4(), text: description, logType: logType, createdAt: createdAt, image: image);
+    final log = PlantLog(id: _uuid.v4(), text: description, tagType: tagType, createdAt: createdAt, image: image);
 
     state = [
       for (final plant in state)

@@ -1,6 +1,7 @@
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/styles.dart';
+import 'package:brown_brown/views/plant_detail_page.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,11 @@ class PlantsPage extends ConsumerWidget {
           child: ListView.builder(
             itemCount: plants.length,
             itemBuilder: (context, index) {
+              final mostRecentLog = plants[index].mostRecentLog();
+
               return GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/plant_detail'),
+                onTap: () =>
+                    Navigator.pushNamed(context, '/plant_detail', arguments: PlantDetailPageArgs(plants[index].id)),
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   decoration: BoxDecoration(
@@ -59,8 +63,10 @@ class PlantsPage extends ConsumerWidget {
                                       style:
                                           Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
                                     ),
-                                    Text('오늘/어제/n일전, last event title here',
-                                        style: Theme.of(context).textTheme.bodySmall),
+                                    Text(
+                                      mostRecentLog?.dateAgo ?? '아직 기록이 없어요',
+                                      style: Theme.of(context).textTheme.bodySmall,
+                                    ),
                                   ],
                                 ),
                               ),

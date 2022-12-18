@@ -3,12 +3,14 @@ import 'dart:math';
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/styles.dart';
+import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:brown_brown/views/nav_components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 enum LogEditMode {
   add,
@@ -116,6 +118,7 @@ class PlantLogEditPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final plant = args['plant'] as Plant;
+    final TextEditingController ctrl = TextEditingController();
 
     Future<void> onSubmitted() async {
       final editMode = args['mode'] as LogEditMode;
@@ -142,7 +145,7 @@ class PlantLogEditPage extends ConsumerWidget {
             ),
             title: Text(plant.name),
             subtitle: Text(
-              DateFormat('yyyy-MM-dd').format(ref.watch(_dateTimeProvider)),
+              formatDateTime(ref.watch(_dateTimeProvider)),
               style: Theme.of(context).textTheme.bodySmall,
             ),
             onTap: () async {
@@ -163,6 +166,7 @@ class PlantLogEditPage extends ConsumerWidget {
           Padding(
             padding: EdgeInsets.all(10),
             child: TextField(
+              controller: ctrl,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: '내용',
@@ -244,7 +248,13 @@ class PlantLogEditPage extends ConsumerWidget {
           ),
         ),
         onTap: () {
-          // TODO:
+          ref.watch(plantListProvider.notifier).addLog(
+                plantId: plant.id,
+                description: ctrl.text,
+                logType: ref.watch(_tagProvider),
+                createdAt: ref.watch(_dateTimeProvider),
+              );
+          Navigator.of(context).pop();
         },
       ),
     );

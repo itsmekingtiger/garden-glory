@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:brown_brown/entities/plant.dart';
+import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,8 +14,7 @@ final plantListProvider = StateNotifierProvider<PlantList, List<Plant>>((ref) {
 final needToWateringProvider = Provider<List<Plant>>((ref) {
   final plants = ref.watch(plantListProvider);
 
-  var today = DateTime.now();
-  return plants.where((plant) => plant.needToWatering(today)).toList();
+  return plants.where((plant) => plant.needToWatering(kEndOfToday)).toList();
 });
 
 class PlantList extends StateNotifier<List<Plant>> {
@@ -31,7 +31,7 @@ class PlantList extends StateNotifier<List<Plant>> {
         id: _uuid.v4(),
         name: name,
         logs: const [],
-        wateringEvery: 0,
+        wateringEvery: wateringEvery,
         profileImage: profileImage,
       ),
     ];
@@ -59,20 +59,16 @@ class PlantList extends StateNotifier<List<Plant>> {
   }
 
   void addLog({
-    required String id,
-    required PlantLog log,
+    required String plantId,
+    required String description,
+    required Set<TagType> logType,
+    required DateTime createdAt,
   }) {
+    final log = PlantLog(id: _uuid.v4(), text: description, logType: logType, createdAt: createdAt);
+
     state = [
       for (final plant in state)
-        if (plant.id == id)
-          Plant(
-            id: plant.id,
-            name: plant.name,
-            logs: [...plant.logs, log],
-            wateringEvery: plant.wateringEvery,
-          )
-        else
-          plant,
+        if (plant.id == plantId) plant.copyWith(logs: [...plant.logs, log]) else plant,
     ];
   }
 

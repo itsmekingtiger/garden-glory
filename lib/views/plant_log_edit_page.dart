@@ -11,9 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
 enum LogEditMode {
   add,
@@ -112,7 +109,7 @@ final _tagProvider = StateNotifierProvider<_TagNotifier, Set<TagType>>((ref) => 
 
 class PlantLogEditPage extends ConsumerStatefulWidget {
   static const pageUrl = '/plant_log_edit';
-  PlantLogEditPage({super.key});
+  const PlantLogEditPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PlantLogEditPageState();

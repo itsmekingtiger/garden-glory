@@ -9,7 +9,6 @@ import 'package:brown_brown/views/nav_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
 class NewPlantPage extends ConsumerStatefulWidget {

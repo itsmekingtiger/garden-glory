@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/views/main_page.dart';
-import 'package:brown_brown/views/nav_components.dart';
 import 'package:brown_brown/views/plants_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

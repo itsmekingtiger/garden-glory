@@ -1,12 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:brown_brown/views/main_page.dart';
 import 'package:brown_brown/views/plants_page.dart';
 import 'package:brown_brown/views/root_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 AppBar SubPageAppBar(BuildContext context, String title) {
   return AppBar(

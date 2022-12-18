@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
+import 'package:brown_brown/ui/glory_image_picker.dart';
 import 'package:brown_brown/ui/styles.dart';
 import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:brown_brown/views/nav_components.dart';
@@ -121,9 +122,7 @@ class _PlantLogEditPageState extends ConsumerState {
   final DateTime now = DateTime.now();
   late final DateTime firstDate = now.subtract(Duration(days: 365));
 
-  Image? profileImage;
-  final ImagePicker _picker = ImagePicker();
-  XFile? file;
+  File? file;
 
   @override
   Widget build(BuildContext context) {
@@ -239,46 +238,9 @@ class _PlantLogEditPageState extends ConsumerState {
                     constraints: BoxConstraints.tightFor(width: 40, height: 40),
                     icon: Icon(CupertinoIcons.camera),
                     onPressed: () async {
-                      showModalBottomSheet(
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        builder: (context) => Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: BottomSheet(
-                            shape: RoundedRectangleBorder(borderRadius: Corners.lgBorder),
-                            onClosing: () {},
-                            builder: (context) {
-                              // Pick image from gallery/camera
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ListTile(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(top: Corners.lgRadius)),
-                                    leading: Icon(Icons.camera_alt),
-                                    title: Text('카메라'),
-                                    onTap: () async {
-                                      Navigator.pop(context);
-                                      var _file = await _picker.pickImage(source: ImageSource.camera);
-                                      setState(() => file = _file);
-                                    },
-                                  ),
-                                  ListTile(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(bottom: Corners.lgRadius)),
-                                    leading: Icon(Icons.image),
-                                    title: Text('갤러리'),
-                                    onTap: () async {
-                                      Navigator.pop(context);
-                                      var _file = await _picker.pickImage(source: ImageSource.gallery);
-                                      setState(() => file = _file);
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
+                      showGloryImagePicker(
+                        context,
+                        (file) => setState(() => this.file = file),
                       );
                     },
                   ),

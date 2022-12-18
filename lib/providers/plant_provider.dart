@@ -37,7 +37,7 @@ class PlantList extends StateNotifier<List<Plant>> {
     ];
   }
 
-  void edit({
+  void editPlantDetail({
     required String id,
     String? name,
     int? wateringEvery,
@@ -46,10 +46,8 @@ class PlantList extends StateNotifier<List<Plant>> {
     state = [
       for (final plant in state)
         if (plant.id == id)
-          Plant(
-            id: plant.id,
+          plant.copyWith(
             name: name ?? plant.name,
-            logs: plant.logs,
             wateringEvery: wateringEvery ?? plant.wateringEvery,
             profileImage: profileImage ?? plant.profileImage,
           )
@@ -63,8 +61,9 @@ class PlantList extends StateNotifier<List<Plant>> {
     required String description,
     required Set<TagType> logType,
     required DateTime createdAt,
+    required File? image,
   }) {
-    final log = PlantLog(id: _uuid.v4(), text: description, logType: logType, createdAt: createdAt);
+    final log = PlantLog(id: _uuid.v4(), text: description, logType: logType, createdAt: createdAt, image: image);
 
     state = [
       for (final plant in state)

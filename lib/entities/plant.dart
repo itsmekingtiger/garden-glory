@@ -74,28 +74,31 @@ class PlantLog {
   final String text;
   final Set<TagType> logType;
   final DateTime createdAt;
+  final File? image;
 
   const PlantLog({
     required this.id,
     required this.text,
     required this.logType,
     required this.createdAt,
+    required this.image,
   });
 
-  get date => formatDateTime(createdAt);
-  String? get dateAgo => dateTimeAgo(createdAt, DateTime.now());
+  String get date => formatDateTime(createdAt);
 
   PlantLog copyWith({
     String? id,
     String? text,
     Set<TagType>? logType,
     DateTime? createdAt,
+    File? profileImage,
   }) {
     return PlantLog(
       id: id ?? this.id,
       text: text ?? this.text,
       logType: logType ?? this.logType,
       createdAt: createdAt ?? this.createdAt,
+      image: profileImage ?? this.image,
     );
   }
 }

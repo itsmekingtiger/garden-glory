@@ -1,6 +1,7 @@
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/styles.dart';
+import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:brown_brown/views/plant_detail_page.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,7 +65,9 @@ class PlantsPage extends ConsumerWidget {
                                           Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      mostRecentLog?.dateAgo ?? '아직 기록이 없어요',
+                                      mostRecentLog == null
+                                          ? '아직 기록이 없어요'
+                                          : dateAgo(mostRecentLog.createdAt, kEndOfToday),
                                       style: Theme.of(context).textTheme.bodySmall,
                                     ),
                                   ],

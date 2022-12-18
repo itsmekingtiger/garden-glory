@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:brown_brown/entities/plant.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -107,15 +109,24 @@ class _TagNotifier extends StateNotifier<Set<TagType>> {
 
 final _tagProvider = StateNotifierProvider<_TagNotifier, Set<TagType>>((ref) => _TagNotifier());
 
-class PlantLogEditPage extends ConsumerWidget {
+class PlantLogEditPage extends ConsumerStatefulWidget {
   static const pageUrl = '/plant_log_edit';
   PlantLogEditPage({super.key});
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _PlantLogEditPageState();
+}
+
+class _PlantLogEditPageState extends ConsumerState {
   final DateTime now = DateTime.now();
   late final DateTime firstDate = now.subtract(Duration(days: 365));
 
+  Image? profileImage;
+  final ImagePicker _picker = ImagePicker();
+  XFile? file;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final plant = args['plant'] as Plant;
     final TextEditingController ctrl = TextEditingController();
@@ -227,7 +238,49 @@ class PlantLogEditPage extends ConsumerWidget {
                   IconButton(
                     constraints: BoxConstraints.tightFor(width: 40, height: 40),
                     icon: Icon(CupertinoIcons.camera),
-                    onPressed: () {},
+                    onPressed: () async {
+                      showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        builder: (context) => Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: BottomSheet(
+                            shape: RoundedRectangleBorder(borderRadius: Corners.lgBorder),
+                            onClosing: () {},
+                            builder: (context) {
+                              // Pick image from gallery/camera
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(top: Corners.lgRadius)),
+                                    leading: Icon(Icons.camera_alt),
+                                    title: Text('카메라'),
+                                    onTap: () async {
+                                      Navigator.pop(context);
+                                      var _file = await _picker.pickImage(source: ImageSource.camera);
+                                      setState(() => file = _file);
+                                    },
+                                  ),
+                                  ListTile(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(bottom: Corners.lgRadius)),
+                                    leading: Icon(Icons.image),
+                                    title: Text('갤러리'),
+                                    onTap: () async {
+                                      Navigator.pop(context);
+                                      var _file = await _picker.pickImage(source: ImageSource.gallery);
+                                      setState(() => file = _file);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -253,6 +306,7 @@ class PlantLogEditPage extends ConsumerWidget {
                 description: ctrl.text,
                 logType: ref.watch(_tagProvider),
                 createdAt: ref.watch(_dateTimeProvider),
+                image: file == null ? null : File(file!.path),
               );
           Navigator.of(context).pop();
         },

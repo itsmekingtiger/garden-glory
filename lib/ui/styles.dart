@@ -124,6 +124,10 @@ class Corners {
   static const double xl = 20;
   static const Radius xlRadius = const Radius.circular(xl);
   static const BorderRadius xlBorder = const BorderRadius.all(xlRadius);
+
+  static const double iPhone = 40;
+  static const Radius iPhoneRadius = const Radius.circular(iPhone);
+  static const BorderRadius iPhoneBorder = const BorderRadius.all(iPhoneRadius);
 }
 
 class VSpace {

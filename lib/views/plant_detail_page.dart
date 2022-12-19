@@ -48,8 +48,15 @@ class PlantDetailPage extends ConsumerWidget {
 
   Widget drawAppBar(Plant plant, BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final subtitleStyle = textTheme.bodyMedium!.copyWith(color: Colors.white);
-    final titleStyle = textTheme.headline4!.copyWith(color: Colors.white, fontWeight: FontWeight.bold);
+    final subtitleStyle = textTheme.bodyMedium!.copyWith(
+      color: Colors.white,
+      backgroundColor: Color(0xFF808000),
+    );
+    final titleStyle = textTheme.headline4!.copyWith(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      backgroundColor: Color(0xFF808000),
+    );
 
     return SliverAppBar(
       floating: true,
@@ -67,19 +74,19 @@ class PlantDetailPage extends ConsumerWidget {
             if (plant.profileImage != null)
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 240,
+                height: 280,
                 child: Image.file(plant.profileImage!, fit: BoxFit.cover),
               ),
             Positioned(
               left: Insets.md,
-              bottom: 30,
+              bottom: 28,
               child: Text(plant.name, style: titleStyle),
             ),
             // FIXME: Plant에 CreatedAt 추가
             Positioned(
               left: Insets.md,
               bottom: Insets.md,
-              child: Text('${plant.wateringEvery.toString()}일 동안 함게 했어요', style: subtitleStyle),
+              child: Text('${plant.wateringEvery.toString()}일 동안 함께 했어요', style: subtitleStyle),
             ),
           ],
         ),
@@ -106,7 +113,7 @@ class GloryTimeLineItem extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(left: 50.0),
+          padding: const EdgeInsets.only(left: 20.0),
           child: Container(
             margin: EdgeInsets.all(20),
             child: Column(
@@ -120,7 +127,18 @@ class GloryTimeLineItem extends StatelessWidget {
                   ],
                 ),
                 VSpace.sm,
-                if (log.image != null) Image(image: FileImage(log.image!)),
+                if (log.image != null) ...[Image(image: FileImage(log.image!)), VSpace.sm],
+                Row(children: [
+                  ...log.tagType
+                      .map((e) => Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Chip(
+                              label: Text(e.translateKR),
+                              visualDensity: VisualDensity.compact,
+                            ),
+                          ))
+                      .toList(),
+                ]),
                 VSpace.sm,
                 Text(log.text),
               ],
@@ -132,17 +150,17 @@ class GloryTimeLineItem extends StatelessWidget {
         Positioned(
           top: 0.0,
           bottom: 0.0,
-          left: 35.0,
+          left: 20,
           child: Container(height: double.infinity, width: 1.0, color: Colors.grey),
         ),
 
         // Dot
         Positioned(
-          top: 20,
-          left: 30,
+          top: 26,
+          left: 16.5,
           child: Container(
-            height: 10.0,
-            width: 10.0,
+            height: 8,
+            width: 8,
             decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.teal),
           ),
         )

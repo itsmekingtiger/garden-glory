@@ -83,7 +83,7 @@ class PlantLog {
     required this.image,
   });
 
-  String get date => formatDateTime(createdAt);
+  String get date => formatDateTimeDow(createdAt);
 
   PlantLog copyWith({
     String? id,

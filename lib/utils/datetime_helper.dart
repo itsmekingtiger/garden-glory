@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 String formatDateTime(DateTime dateTime) => DateFormat('yyyy-MM-dd').format(dateTime);
+String formatDateTimeDow(DateTime dateTime) => DateFormat('yyyy-MM-dd E').format(dateTime);
 
 String dateTimeAgo(DateTime src, DateTime dst) {
   final diff = dst.difference(src);

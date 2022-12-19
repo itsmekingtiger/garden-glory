@@ -1,8 +1,7 @@
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
-import 'package:brown_brown/ui/buttons.dart';
 import 'package:brown_brown/ui/styles.dart';
-import 'package:brown_brown/views/nav_components.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,43 +21,25 @@ class PlantDetailPage extends ConsumerWidget {
     final Plant plant = ref.watch(plantListProvider).firstWhere((element) => element.id == args.id);
 
     return Scaffold(
-      appBar: SubPageAppBar(context, 'name'),
-      body: Column(
-        children: [
-          // 프로필
-          Padding(
-            padding: EdgeInsets.all(Insets.lg),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: plant.profileImage == null ? null : FileImage(plant.profileImage!),
-                  radius: 50,
-                ),
-                Column(
-                  children: [
-                    Text(plant.name, style: Theme.of(context).textTheme.headline4),
-                    Text('물주기: ${plant.wateringEvery.toString()}일', style: Theme.of(context).textTheme.bodyMedium),
-                    GloryTinyTextButton(
-                      onPressed: () => {},
-                      text: '물주기 수정하기',
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
+      body: CustomScrollView(
+        slivers: [
+          // prifle image, name, go back, edit buttom
+          drawAppBar(plant, context),
 
-          // 로그
-          ...plant.logs
-              .take(5)
-              .map((log) => ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: log.image == null ? null : FileImage(log.image!),
-                    ),
-                    title: Text(log.text, style: Theme.of(context).textTheme.bodyMedium),
-                    subtitle: Text('${log.date}, ${log.tagType.map((e) => e.translateKR)}'),
-                  ))
-              .toList(),
+          SliverList(
+              delegate: SliverChildBuilderDelegate(
+            childCount: plant.logs.length,
+            (context, index) {
+              final log = plant.logs[index];
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: log.image == null ? null : FileImage(log.image!),
+                ),
+                title: Text(log.text, style: Theme.of(context).textTheme.bodyMedium),
+                subtitle: Text('${log.date}, ${log.tagType.map((e) => e.translateKR)}'),
+              );
+            },
+          )),
 
           /// TODO: statics
           /// avg Watering (total/recent 4 month)
@@ -66,6 +47,46 @@ class PlantDetailPage extends ConsumerWidget {
           /// avg New Leaves (total/recent 4 month)
         ],
       ),
+    );
+  }
+
+  SliverAppBar drawAppBar(Plant plant, BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final subtitleStyle = textTheme.bodyMedium!.copyWith(color: Colors.white);
+    final titleStyle = textTheme.headline4!.copyWith(color: Colors.white, fontWeight: FontWeight.bold);
+
+    return SliverAppBar(
+      floating: true,
+      expandedHeight: 200,
+      flexibleSpace: FlexibleSpaceBar(
+        // background: plant.profileImage == null ? null : Image.file(plant.profileImage!, fit: BoxFit.cover),
+        background: Stack(
+          children: [
+            if (plant.profileImage != null) Image.file(plant.profileImage!, fit: BoxFit.cover),
+            Positioned(
+              left: Insets.md,
+              bottom: 30,
+              child: Text(plant.name, style: titleStyle),
+            ),
+            // FIXME: Plant에 CreatedAt 추가
+            Positioned(
+              left: Insets.md,
+              bottom: Insets.md,
+              child: Text('${plant.wateringEvery.toString()}일 동안 함게 했어요', style: subtitleStyle),
+            ),
+          ],
+        ),
+      ),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: Container(color: Colors.red),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(CupertinoIcons.option),
+          onPressed: () => {}, // TODO: edit menu
+        ),
+      ],
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
+import 'package:brown_brown/ui/buttons.dart';
 import 'package:brown_brown/ui/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,19 +28,14 @@ class PlantDetailPage extends ConsumerWidget {
           drawAppBar(plant, context),
 
           SliverList(
-              delegate: SliverChildBuilderDelegate(
-            childCount: plant.logs.length,
-            (context, index) {
-              final log = plant.logs[index];
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: log.image == null ? null : FileImage(log.image!),
-                ),
-                title: Text(log.text, style: Theme.of(context).textTheme.bodyMedium),
-                subtitle: Text('${log.date}, ${log.tagType.map((e) => e.translateKR)}'),
-              );
-            },
-          )),
+            delegate: SliverChildBuilderDelegate(
+              childCount: plant.logs.length,
+              (context, index) {
+                final log = plant.logs[index];
+                return GloryTimeLineItem(log: log);
+              },
+            ),
+          ),
 
           /// TODO: statics
           /// avg Watering (total/recent 4 month)
@@ -93,6 +89,63 @@ class PlantDetailPage extends ConsumerWidget {
           icon: Icon(CupertinoIcons.option),
           onPressed: () => {}, // TODO: edit menu
         ),
+      ],
+    );
+  }
+}
+
+///
+/// https://stackoverflow.com/a/50665520
+class GloryTimeLineItem extends StatelessWidget {
+  const GloryTimeLineItem({super.key, required this.log});
+
+  final PlantLog log;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(left: 50.0),
+          child: Container(
+            margin: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(log.date, style: Theme.of(context).textTheme.headline6),
+                    GloryTinyTextButton(onPressed: () {}, text: 'Edit'),
+                  ],
+                ),
+                VSpace.sm,
+                if (log.image != null) Image(image: FileImage(log.image!)),
+                VSpace.sm,
+                Text(log.text),
+              ],
+            ),
+          ),
+        ),
+
+        // Line
+        Positioned(
+          top: 0.0,
+          bottom: 0.0,
+          left: 35.0,
+          child: Container(height: double.infinity, width: 1.0, color: Colors.grey),
+        ),
+
+        // Dot
+        Positioned(
+          top: 20,
+          left: 30,
+          child: Container(
+            height: 10.0,
+            width: 10.0,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.teal),
+          ),
+        )
       ],
     );
   }

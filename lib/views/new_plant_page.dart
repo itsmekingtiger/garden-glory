@@ -52,7 +52,7 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
                     height: 150,
                     child: CircleAvatar(
                       maxRadius: 150,
-                      backgroundImage: file == null ? null : FileImage(File(file!.path)),
+                      backgroundImage: file == null ? null : resolveImageProvider(file!.path),
                     ),
                   ),
                   Positioned(

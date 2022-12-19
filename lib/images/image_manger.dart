@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as libpath;
 import 'package:path_provider/path_provider.dart';
 
@@ -51,3 +53,11 @@ class ImageManager implements ImageLoaderSaver {
 }
 
 ImageManager imageManager = ImageManager._();
+
+ImageProvider resolveImageProvider(String pathOrUrl) {
+  if (kIsWeb) {
+    return NetworkImage(pathOrUrl);
+  } else {
+    return FileImage(File(pathOrUrl));
+  }
+}

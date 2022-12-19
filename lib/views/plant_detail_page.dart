@@ -50,7 +50,7 @@ class PlantDetailPage extends ConsumerWidget {
     );
   }
 
-  SliverAppBar drawAppBar(Plant plant, BuildContext context) {
+  Widget drawAppBar(Plant plant, BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final subtitleStyle = textTheme.bodyMedium!.copyWith(color: Colors.white);
     final titleStyle = textTheme.headline4!.copyWith(color: Colors.white, fontWeight: FontWeight.bold);
@@ -62,7 +62,18 @@ class PlantDetailPage extends ConsumerWidget {
         // background: plant.profileImage == null ? null : Image.file(plant.profileImage!, fit: BoxFit.cover),
         background: Stack(
           children: [
-            if (plant.profileImage != null) Image.file(plant.profileImage!, fit: BoxFit.cover),
+            /// SliverAppBar는 SafeArea로 쌓여있지 않기 떄문에
+            /// 실제 크기 = expandedHeight + 앱바 크기이다.
+            /// 따라서 expandedHeight를 기준으로 이미지를 그리고 추가적으로 여유를 둔다.
+            ///
+            /// 아니면 SliverPersistentHeader + SliverPersistentHeaderDelegate를 사용 할 수도 있을듯
+            /// [flutter - Add SafeArea into SliverAppBar - Stack Overflow](https://stackoverflow.com/questions/62446686/add-safearea-into-sliverappbar)
+            if (plant.profileImage != null)
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 240,
+                child: Image.file(plant.profileImage!, fit: BoxFit.cover),
+              ),
             Positioned(
               left: Insets.md,
               bottom: 30,
@@ -76,10 +87,6 @@ class PlantDetailPage extends ConsumerWidget {
             ),
           ],
         ),
-      ),
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: Container(color: Colors.red),
       ),
       actions: [
         IconButton(

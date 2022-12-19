@@ -84,9 +84,10 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
       ),
       bottomSheet: GestureDetector(
         child: Container(
-          height: 50,
+          height: 50 + MediaQuery.of(context).viewPadding.bottom,
           color: Theme.of(context).primaryColor,
           alignment: Alignment.center,
+          padding: EdgeInsets.all(Insets.lg),
           child: Text(
             '다음',
             style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
@@ -199,7 +200,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
           Expanded(
             child: GestureDetector(
               child: Container(
-                height: 50,
+                height: 50 + MediaQuery.of(context).viewPadding.bottom,
                 color: Theme.of(context).errorColor,
                 alignment: Alignment.center,
                 child: Text(
@@ -215,7 +216,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
           Expanded(
             child: GestureDetector(
               child: Container(
-                height: 50,
+                height: 50 + MediaQuery.of(context).viewPadding.bottom,
                 color: Theme.of(context).primaryColor,
                 alignment: Alignment.center,
                 child: Text(

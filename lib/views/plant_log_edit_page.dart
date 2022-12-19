@@ -193,7 +193,7 @@ class _PlantLogEditPageState extends ConsumerState {
       //
       bottomSheet: GestureDetector(
         child: Container(
-          height: 50,
+          height: 50 + MediaQuery.of(context).viewPadding.bottom,
           color: Theme.of(context).primaryColor,
           alignment: Alignment.center,
           child: Text(
@@ -236,7 +236,7 @@ class TagBottomSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomSheet(
-      shape: RoundedRectangleBorder(borderRadius: Corners.lgBorder),
+      shape: RoundedRectangleBorder(borderRadius: Corners.iPhoneBorder),
       onClosing: () {},
       builder: (context) {
         return ListView(
@@ -268,10 +268,16 @@ class TagBottomSheetItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title),
+      title: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(title),
+      ),
       shape: shape,
       leading: leading,
-      trailing: trailing,
+      trailing: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: trailing,
+      ),
       subtitle: subtitle,
       onTap: onTap,
     );

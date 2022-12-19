@@ -19,26 +19,6 @@ enum LogEditMode {
   edit,
 }
 
-class _DateTimeNotifier extends StateNotifier<DateTime> {
-  _DateTimeNotifier() : super(DateTime.now());
-
-  void setDate(DateTime date) {
-    state = date;
-  }
-}
-
-final _dateTimeProvider = StateNotifierProvider<_DateTimeNotifier, DateTime>((ref) => _DateTimeNotifier());
-
-class _TagNotifier extends StateNotifier<Set<TagType>> {
-  _TagNotifier() : super(<TagType>{});
-
-  void on(TagType tagType) => state = {...state, tagType};
-
-  void off(TagType tagType) => state = {...state..remove(tagType)};
-}
-
-final _tagProvider = StateNotifierProvider<_TagNotifier, Set<TagType>>((ref) => _TagNotifier());
-
 class PlantLogEditPage extends ConsumerStatefulWidget {
   static const pageUrl = '/plant_log_edit';
   const PlantLogEditPage({super.key});
@@ -51,13 +31,15 @@ class _PlantLogEditPageState extends ConsumerState {
   final DateTime now = DateTime.now();
   late final DateTime firstDate = now.subtract(Duration(days: 365));
 
+  String text = '';
+  DateTime dateTime = DateTime.now();
+  Set<TagType> tags = <TagType>{};
   File? file;
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final plant = args['plant'] as Plant;
-    final TextEditingController ctrl = TextEditingController();
 
     Future<void> onSubmitted() async {
       final editMode = args['mode'] as LogEditMode;
@@ -86,13 +68,13 @@ class _PlantLogEditPageState extends ConsumerState {
             subtitle: Row(
               children: [
                 Text(
-                  formatDateTime(ref.watch(_dateTimeProvider)),
+                  formatDateTime(dateTime),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 HSpace.sm,
-                if (isNotSameDate(ref.watch(_dateTimeProvider), DateTime.now()))
+                if (isNotSameDate(dateTime, DateTime.now()))
                   GloryTinyTextButton(
-                    onPressed: () => ref.watch(_dateTimeProvider.notifier).setDate(DateTime.now()),
+                    onPressed: () => setState(() => dateTime = DateTime.now()),
                     text: 'Set to today',
                   )
               ],
@@ -100,13 +82,13 @@ class _PlantLogEditPageState extends ConsumerState {
             onTap: () async {
               final date = await showDatePicker(
                 context: context,
-                initialDate: ref.watch(_dateTimeProvider),
+                initialDate: dateTime,
                 firstDate: firstDate,
                 lastDate: now,
               );
 
               if (date != null) {
-                ref.watch(_dateTimeProvider.notifier).setDate(date);
+                setState(() => dateTime = date);
               }
             },
           ),
@@ -115,7 +97,6 @@ class _PlantLogEditPageState extends ConsumerState {
           Padding(
             padding: EdgeInsets.all(10),
             child: TextField(
-              controller: ctrl,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: '내용',
@@ -124,6 +105,7 @@ class _PlantLogEditPageState extends ConsumerState {
               ),
               minLines: 5,
               maxLines: 20,
+              onChanged: (value) => setState(() => text = value),
             ),
           ),
 
@@ -143,17 +125,34 @@ class _PlantLogEditPageState extends ConsumerState {
                         TextButton(
                           child: Text('태그 편집'),
                           onPressed: () async {
+                            /// Note:
+                            /// 안에서는 setState를 해도 showModalBottomSheet로 그린 위젯은 rerender 되지 않음.
+                            /// 이를 해결하기 위해서는 StatefulBuilder로 inner Widget을 감싸야함.
+                            /// 또한 setState를 StatefulBuilder.builder 콜백의 인자로 주어지는 또다른 setState로 감싸야함.
                             showModalBottomSheet(
                               backgroundColor: Colors.transparent,
                               context: context,
-                              builder: (context) => Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: TagBottomSheet(),
+                              builder: (context) => StatefulBuilder(
+                                builder: (context, setOutterState) => Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: TagBottomSheet(
+                                      tags: tags,
+                                      toggle: (tag) {
+                                        tags.contains(tag)
+                                            ? setOutterState(() => setState(() {
+                                                  tags.remove(tag);
+                                                  tags = {...tags};
+                                                }))
+                                            : setOutterState(() => setState(() {
+                                                  tags = {...tags, tag};
+                                                }));
+                                      }),
+                                ),
                               ),
                             );
                           },
                         ),
-                        ...ref.watch(_tagProvider).map((tag) {
+                        ...tags.map((tag) {
                           final colorRaw = tag.color;
                           final color = Color(colorRaw);
                           final rgb = toRGB(colorRaw);
@@ -204,9 +203,9 @@ class _PlantLogEditPageState extends ConsumerState {
         onTap: () {
           ref.watch(plantListProvider.notifier).addLog(
                 plantId: plant.id,
-                description: ctrl.text,
-                tagType: ref.watch(_tagProvider),
-                createdAt: ref.watch(_dateTimeProvider),
+                description: text,
+                tagType: tags,
+                createdAt: dateTime,
                 image: file == null ? null : File(file!.path),
               );
           Navigator.of(context).pop();
@@ -216,31 +215,36 @@ class _PlantLogEditPageState extends ConsumerState {
   }
 }
 
-class TagBottomSheet extends ConsumerWidget {
+class TagBottomSheet extends StatelessWidget {
   const TagBottomSheet({
     Key? key,
+    required this.tags,
+    required this.toggle,
   }) : super(key: key);
 
-  List<TagBottomSheetItem> drawItems(BuildContext context, WidgetRef ref) {
+  final Set<TagType> tags;
+  final void Function(TagType tag) toggle;
+
+  List<TagBottomSheetItem> drawItems(BuildContext context) {
     return TagType.values.map((e) {
-      final checked = ref.watch(_tagProvider).contains(e);
+      final checked = tags.contains(e);
 
       return TagBottomSheetItem(
         e.translateKR,
         trailing: checked ? Icon(Icons.check, color: Theme.of(context).primaryColor) : null,
-        onTap: () => checked ? ref.read(_tagProvider.notifier).off(e) : ref.watch(_tagProvider.notifier).on(e),
+        onTap: () => toggle(e),
       );
     }).toList();
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return BottomSheet(
       shape: RoundedRectangleBorder(borderRadius: Corners.iPhoneBorder),
       onClosing: () {},
       builder: (context) {
         return ListView(
-          children: drawItems(context, ref),
+          children: drawItems(context),
         );
       },
     );

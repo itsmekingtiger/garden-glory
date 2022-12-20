@@ -21,13 +21,15 @@ class _RootPageState extends ConsumerState {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasNotification = ref.watch(needToWateringProvider).length > 0;
+
     final List<Plant> plants = ref.watch(plantListProvider);
 
     return Scaffold(
       appBar: drawAppBar(context, 'Garden Glory'),
       drawer: drawDrawer(),
       body: [MainPage(), PlantsPage()][pageIndex],
-      bottomNavigationBar: drawNavigationBar(),
+      bottomNavigationBar: drawNavigationBar(hasNotification),
     );
   }
 
@@ -84,11 +86,21 @@ class _RootPageState extends ConsumerState {
     );
   }
 
-  Widget drawNavigationBar() {
+  Widget drawNavigationBar(bool hasNotification) {
     return NavigationBar(
       selectedIndex: pageIndex,
-      destinations: const [
-        NavigationDestination(icon: Icon(CupertinoIcons.sparkles), label: '홈'),
+      destinations: [
+        NavigationDestination(
+            icon: Stack(children: [
+              Icon(CupertinoIcons.bell),
+              if (hasNotification)
+                Positioned(
+                  top: 0.0,
+                  right: 0.0,
+                  child: Icon(Icons.brightness_1, size: 8.0, color: Colors.redAccent),
+                )
+            ]),
+            label: '알림'),
         NavigationDestination(icon: Icon(CupertinoIcons.tree), label: '내 식물'),
         NavigationDestination(icon: Icon(CupertinoIcons.calendar), label: '캘린더'),
       ],

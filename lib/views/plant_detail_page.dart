@@ -31,7 +31,7 @@ class PlantDetailPage extends ConsumerWidget {
             delegate: SliverChildBuilderDelegate(
               childCount: plant.logs.length,
               (context, index) {
-                final log = plant.logs[index];
+                final log = plant.logs.reversed.toList()[index];
                 return GloryTimeLineItem(log: log);
               },
             ),
@@ -86,7 +86,7 @@ class PlantDetailPage extends ConsumerWidget {
             Positioned(
               left: Insets.md,
               bottom: Insets.md,
-              child: Text('${plant.wateringEvery.toString()}일 동안 함께 했어요', style: subtitleStyle),
+              child: drawDaysWithForText(plant, subtitleStyle),
             ),
           ],
         ),
@@ -98,6 +98,14 @@ class PlantDetailPage extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  Text drawDaysWithForText(Plant plant, TextStyle subtitleStyle) {
+    final msg = plant.logs.isEmpty
+        ? '아직 기록이 없어요'
+        : '${DateTime.now().difference(plant.logs.first.createdAt).inDays}일 동안 함께 했어요';
+
+    return Text(msg, style: subtitleStyle);
   }
 }
 

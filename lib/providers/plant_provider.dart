@@ -67,7 +67,10 @@ class PlantList extends StateNotifier<List<Plant>> {
 
     state = [
       for (final plant in state)
-        if (plant.id == plantId) plant.copyWith(logs: [...plant.logs, log]) else plant,
+        if (plant.id == plantId)
+          plant.copyWith(logs: [...plant.logs, log]..sort((a, b) => a.createdAt.difference(b.createdAt).inDays))
+        else
+          plant,
     ];
   }
 

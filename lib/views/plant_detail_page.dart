@@ -102,9 +102,8 @@ class PlantDetailPage extends ConsumerWidget {
   }
 
   Text drawDaysWithForText(Plant plant, TextStyle subtitleStyle) {
-    final msg = plant.logs.isEmpty
-        ? '아직 기록이 없어요'
-        : '${DateTime.now().difference(plant.logs.first.createdAt).inDays}일 동안 함께 했어요';
+    final days = plant.daysWithFor;
+    final msg = days == 0 ? '아직 기록이 없어요' : '$days일 동안 함께 했어요';
 
     return Text(msg, style: subtitleStyle);
   }

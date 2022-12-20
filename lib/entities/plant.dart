@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:brown_brown/utils/datetime_helper.dart';
@@ -31,6 +32,12 @@ class Plant {
 
     return nextWatring == null ? false : nextWatring!.isBefore(today);
   }
+
+  int get daysWithFor => logs.isEmpty ? 0 : DateTime.now().difference(logs.first.createdAt).inDays;
+  String get avgWatering =>
+      (daysWithFor / logs.where((log) => log.tagType.contains(TagType.watering)).length).toStringAsFixed(1);
+  String get avgFeeding =>
+      (daysWithFor / logs.where((log) => log.tagType.contains(TagType.feeding)).length).toStringAsFixed(1);
 
   Plant copyWith({
     String? id,

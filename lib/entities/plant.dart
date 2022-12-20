@@ -57,16 +57,16 @@ class Plant {
 }
 
 enum TagType {
-  watering(0xFF4361ee, '물'), // 💦
-  seeding(0xFF582f0e, '파종'), // 🚜
-  germinated(0xFF00E680, '발아'), // 🌱
-  potChanging(0xFFF4C095, '분갈이'), // 🪴
   today(0xFF00B3E6, '오늘'), // 🌞
+  watering(0xFF4361ee, '물'), // 💦
+  feeding(0xFFcb997e, '비료'), // 🍔
+  potChanging(0xFFF4C095, '분갈이'), // 🪴
   newLeaf(0xFF6a994e, '신엽'), // 🍃
   flower(0xFFFFFF99, '개화'), // 🌹
-  suffering(0xFF991AFF, '🐛'), //
+  suffering(0xFF991AFF, '병충해'), //🐛
   pesticide(0xFFED2F36, '농약'), // ☣️
-  feeding(0xFFcb997e, '비료'); // 🍔
+  germinated(0xFF00E680, '발아'), // 🌱
+  seeding(0xFF582f0e, '파종'); // 🚜
 
   const TagType(this.color, this.translateKR);
 

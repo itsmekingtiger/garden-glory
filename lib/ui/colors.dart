@@ -22,6 +22,9 @@ const MaterialColor tossColor = MaterialColor(
   },
 );
 
+const tossButtonBg = Color(0xffe6f0fe);
+const tossButtonFg = Color(0xff3182f6);
+
 List<Color> colorArray = [
   Color(0xFF00B3E6),
   Color(0xFF00E680),

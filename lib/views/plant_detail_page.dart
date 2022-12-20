@@ -1,6 +1,7 @@
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/buttons.dart';
+import 'package:brown_brown/ui/colors.dart';
 import 'package:brown_brown/ui/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -141,8 +142,12 @@ class GloryTimeLineItem extends StatelessWidget {
                       .map((e) => Padding(
                             padding: const EdgeInsets.only(right: 8.0),
                             child: Chip(
-                              label: Text(e.translateKR),
-                              visualDensity: VisualDensity.compact,
+                              label: Text(
+                                e.translateKR,
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: tossButtonFg),
+                              ),
+                              visualDensity: visualDensityMin,
+                              backgroundColor: tossButtonBg,
                             ),
                           ))
                       .toList(),

@@ -21,21 +21,17 @@ import 'package:google_fonts/google_fonts.dart';
 ///
 ///
 class TextStyles {
-  static const TextStyle _baseFamily =
-      TextStyle(fontWeight: lightWeight, color: generalColor);
-  static final TextStyle _monoFamily = GoogleFonts.nanumGothicCoding(
-      fontWeight: _baseFamily.fontWeight, color: _baseFamily.color);
-  static final TextStyle _inversedFamily =
-      _baseFamily.copyWith(color: Colors.white);
+  static const TextStyle _baseFamily = TextStyle(fontWeight: lightWeight, color: generalColor);
+  static final TextStyle _monoFamily =
+      GoogleFonts.nanumGothicCoding(fontWeight: _baseFamily.fontWeight, color: _baseFamily.color);
+  static final TextStyle _inversedFamily = _baseFamily.copyWith(color: Colors.white);
 
   static TextStyle get header => _baseFamily.copyWith(fontSize: headerSize);
   static TextStyle get primary => _baseFamily.copyWith(fontSize: primarySize);
-  static TextStyle get secondary =>
-      _baseFamily.copyWith(fontSize: secondarySize);
-  static TextStyle get tertiary => _baseFamily.copyWith(
-      fontSize: tertiarySize, color: lightColor, fontWeight: generalWeight);
-  static TextStyle get small => _baseFamily.copyWith(
-      fontSize: smallSize, color: lightColor, fontWeight: generalWeight);
+  static TextStyle get secondary => _baseFamily.copyWith(fontSize: secondarySize);
+  static TextStyle get tertiary =>
+      _baseFamily.copyWith(fontSize: tertiarySize, color: lightColor, fontWeight: generalWeight);
+  static TextStyle get small => _baseFamily.copyWith(fontSize: smallSize, color: lightColor, fontWeight: generalWeight);
 
   static TextStyle get headerLight => header.copyWith(color: lightColor);
   static TextStyle get primaryLight => primary.copyWith(color: lightColor);
@@ -49,25 +45,16 @@ class TextStyles {
   static TextStyle get tertiaryWeak => tertiary.copyWith(color: weakColor);
   static TextStyle get smallWeak => small.copyWith(color: weakColor);
 
-  static TextStyle get primaryMono =>
-      _monoFamily.copyWith(fontSize: primarySize + _size);
-  static TextStyle get secondaryMono =>
-      _monoFamily.copyWith(fontSize: secondarySize + _size);
-  static TextStyle get tertiaryMono =>
-      _monoFamily.copyWith(fontSize: tertiarySize + _size, color: lightColor);
-  static TextStyle get smallMono =>
-      _monoFamily.copyWith(fontSize: smallSize + _size, color: lightColor);
+  static TextStyle get primaryMono => _monoFamily.copyWith(fontSize: primarySize + _size);
+  static TextStyle get secondaryMono => _monoFamily.copyWith(fontSize: secondarySize + _size);
+  static TextStyle get tertiaryMono => _monoFamily.copyWith(fontSize: tertiarySize + _size, color: lightColor);
+  static TextStyle get smallMono => _monoFamily.copyWith(fontSize: smallSize + _size, color: lightColor);
 
-  static TextStyle get headerInversed =>
-      _inversedFamily.copyWith(fontSize: headerSize);
-  static TextStyle get primaryInversed =>
-      _inversedFamily.copyWith(fontSize: primarySize);
-  static TextStyle get secondaryInversed =>
-      _inversedFamily.copyWith(fontSize: secondarySize);
-  static TextStyle get tertiaryInversed => _inversedFamily.copyWith(
-      fontSize: tertiarySize, fontWeight: generalWeight);
-  static TextStyle get smallInversed =>
-      _inversedFamily.copyWith(fontSize: smallSize, fontWeight: generalWeight);
+  static TextStyle get headerInversed => _inversedFamily.copyWith(fontSize: headerSize);
+  static TextStyle get primaryInversed => _inversedFamily.copyWith(fontSize: primarySize);
+  static TextStyle get secondaryInversed => _inversedFamily.copyWith(fontSize: secondarySize);
+  static TextStyle get tertiaryInversed => _inversedFamily.copyWith(fontSize: tertiarySize, fontWeight: generalWeight);
+  static TextStyle get smallInversed => _inversedFamily.copyWith(fontSize: smallSize, fontWeight: generalWeight);
 
   static const double headerSize = 24;
   static const double primarySize = 20;
@@ -87,16 +74,11 @@ class TextStyles {
 
 /// Bootstrap의 Button을 참조함
 class ButtonStyles {
-  static ButtonStyle get primary =>
-      TextButton.styleFrom(foregroundColor: Colors.blue);
-  static ButtonStyle get secondary =>
-      TextButton.styleFrom(foregroundColor: Colors.grey);
-  static ButtonStyle get success =>
-      TextButton.styleFrom(foregroundColor: Colors.green);
-  static ButtonStyle get danger =>
-      TextButton.styleFrom(foregroundColor: Colors.red);
-  static ButtonStyle get warning =>
-      TextButton.styleFrom(foregroundColor: Colors.yellow);
+  static ButtonStyle get primary => TextButton.styleFrom(foregroundColor: Colors.blue);
+  static ButtonStyle get secondary => TextButton.styleFrom(foregroundColor: Colors.grey);
+  static ButtonStyle get success => TextButton.styleFrom(foregroundColor: Colors.green);
+  static ButtonStyle get danger => TextButton.styleFrom(foregroundColor: Colors.red);
+  static ButtonStyle get warning => TextButton.styleFrom(foregroundColor: Colors.yellow);
 }
 
 /// [xs]: 버튼, input 등
@@ -185,3 +167,6 @@ class ColorFilters {
     0,
   ];
 }
+
+const visualDensityMin =
+    VisualDensity(horizontal: VisualDensity.minimumDensity, vertical: VisualDensity.minimumDensity);

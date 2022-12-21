@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/buttons.dart';
 import 'package:brown_brown/ui/colors.dart';
 import 'package:brown_brown/ui/styles.dart';
+import 'package:brown_brown/views/edit_plant_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -92,10 +95,14 @@ class PlantDetailPage extends ConsumerWidget {
           ],
         ),
       ),
+      leading: _ActionButton(
+        child: Icon(CupertinoIcons.back),
+        onTab: () => Navigator.of(context).pop(),
+      ),
       actions: [
-        IconButton(
-          icon: Icon(CupertinoIcons.option),
-          onPressed: () => {}, // TODO: edit menu
+        _ActionButton(
+          child: Icon(CupertinoIcons.pen),
+          onTab: () => Navigator.of(context).pushNamed(EditPlantPage.pageUrl, arguments: {'plantId': plant.id}),
         ),
       ],
     );
@@ -106,6 +113,43 @@ class PlantDetailPage extends ConsumerWidget {
     final msg = days == 0 ? '아직 기록이 없어요' : '$days일 동안 함께 했어요';
 
     return Text(msg, style: subtitleStyle);
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    Key? key,
+    required this.child,
+    required this.onTab,
+  }) : super(key: key);
+
+  final Widget child;
+  final VoidCallback onTab;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 56,
+      width: 56,
+      child: Center(
+        child: ClipOval(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            child: GestureDetector(
+              onTap: onTab,
+              child: Container(
+                height: 50,
+                width: 50,
+                color: Colors.grey.shade200.withOpacity(0.1),
+                child: Center(
+                  child: child,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

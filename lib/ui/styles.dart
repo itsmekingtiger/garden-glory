@@ -113,6 +113,8 @@ class Corners {
 }
 
 class VSpace {
+  VSpace._();
+
   static SizedBox get xs => SizedBox(height: Insets.xs);
   static SizedBox get sm => SizedBox(height: Insets.sm);
   static SizedBox get md => SizedBox(height: Insets.md);
@@ -121,6 +123,8 @@ class VSpace {
 }
 
 class HSpace {
+  HSpace._();
+
   static SizedBox get xs => SizedBox(width: Insets.xs);
   static SizedBox get sm => SizedBox(width: Insets.sm);
   static SizedBox get md => SizedBox(width: Insets.md);

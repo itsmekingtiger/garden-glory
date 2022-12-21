@@ -1,3 +1,4 @@
+import 'package:brown_brown/views/edit_plant_page.dart';
 import 'package:brown_brown/views/new_plant_page.dart';
 import 'package:brown_brown/views/plant_detail_page.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';
@@ -45,6 +46,8 @@ class MyApp extends StatelessWidget {
         NewPlantPage.pageUrl: (context) => NewPlantPage(),
         NewPlanSetWateringPage.pageUrl: (context) => NewPlanSetWateringPage(),
         PlantDetailPage.pageUrl: (context) => PlantDetailPage(),
+        EditPlantPage.pageUrl: (context) =>
+            EditPlantPage(plantId: (ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>)['plantId']),
         PlantLogEditPage.pageUrl: (context) => PlantLogEditPage(),
       },
     );

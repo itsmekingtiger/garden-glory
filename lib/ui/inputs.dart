@@ -14,6 +14,7 @@ class DecoInput extends StatefulWidget {
     this.autoFocus = false,
     this.maxLength,
     this.hintText,
+    this.lableText,
     this.textAlign = TextAlign.start,
   }) : super(key: key);
 
@@ -27,6 +28,7 @@ class DecoInput extends StatefulWidget {
   final int? maxLength;
   final TextAlign textAlign;
   final String? hintText;
+  final String? lableText;
 
   @override
   _DecoInputState createState() => _DecoInputState();
@@ -66,6 +68,7 @@ class _DecoInputState extends State<DecoInput> {
           controller: widget.controller,
           focusNode: focusNode,
           decoration: InputDecoration(
+            label: widget.lableText == null ? null : Text(widget.lableText!),
             hintText: widget.hintText,
             focusedBorder: OutlineInputBorder(
               borderRadius: Corners.smBorder,
@@ -77,7 +80,7 @@ class _DecoInputState extends State<DecoInput> {
             ),
             contentPadding: EdgeInsets.all(Insets.sm),
             isDense: true,
-            counterText: "",
+            counterText: '',
             // suffixIcon: Icon(CupertinoIcons.clear),
           ),
           style: widget.style,

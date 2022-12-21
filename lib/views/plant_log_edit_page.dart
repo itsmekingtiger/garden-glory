@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
@@ -11,48 +10,66 @@ import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:brown_brown/views/nav_components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-enum LogEditMode {
-  add,
-  edit,
-}
 
 class PlantLogEditPage extends ConsumerStatefulWidget {
   static const pageUrl = '/plant_log_edit';
-  const PlantLogEditPage({super.key});
+
+  final Plant plant;
+  final PlantLog? log;
+
+  const PlantLogEditPage({super.key, required this.plant, this.log});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PlantLogEditPageState();
 }
 
-class _PlantLogEditPageState extends ConsumerState {
+class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
   final DateTime now = DateTime.now();
   late final DateTime firstDate = now.subtract(Duration(days: 365));
 
-  String text = '';
+  String id = '';
+  late TextEditingController txtCtrl;
   DateTime dateTime = DateTime.now();
   Set<TagType> tags = <TagType>{};
   File? file;
 
   @override
-  Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final plant = args['plant'] as Plant;
+  void initState() {
+    super.initState();
 
-    Future<void> onSubmitted() async {
-      final editMode = args['mode'] as LogEditMode;
-
-      if (editMode == LogEditMode.add) {
-        // add
-      } else {
-        // edit
-      }
+    if (widget.log != null) {
+      id = widget.log!.id;
+      txtCtrl = TextEditingController(text: widget.log!.text);
+      dateTime = widget.log!.createdAt;
+      tags = widget.log!.tagType;
+      file = widget.log!.image;
+    } else {
+      txtCtrl = TextEditingController(text: '');
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SubPageAppBar(context, '오늘의 기록'),
+      appBar: SubPageAppBar(
+        context,
+        '오늘의 기록',
+        actions: widget.log == null
+            ? null
+            : [
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+
+                      ref.watch(plantListProvider.notifier).removeLog(
+                            plant: widget.plant,
+                            log: widget.log!,
+                          );
+                    },
+                    icon: Icon(CupertinoIcons.trash))
+              ],
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -62,9 +79,9 @@ class _PlantLogEditPageState extends ConsumerState {
           ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 20),
             leading: CircleAvatar(
-              backgroundImage: plant.profileImage == null ? null : FileImage(plant.profileImage!),
+              backgroundImage: widget.plant.profileImage == null ? null : FileImage(widget.plant.profileImage!),
             ),
-            title: Text(plant.name),
+            title: Text(widget.plant.name),
             subtitle: Row(
               children: [
                 Text(
@@ -105,7 +122,7 @@ class _PlantLogEditPageState extends ConsumerState {
               ),
               minLines: 5,
               maxLines: 20,
-              onChanged: (value) => setState(() => text = value),
+              controller: txtCtrl,
             ),
           ),
 
@@ -201,13 +218,24 @@ class _PlantLogEditPageState extends ConsumerState {
           ),
         ),
         onTap: () {
-          ref.watch(plantListProvider.notifier).addLog(
-                plantId: plant.id,
-                description: text,
-                tagType: tags,
-                createdAt: dateTime,
-                image: file == null ? null : File(file!.path),
-              );
+          if (widget.log == null) {
+            ref.watch(plantListProvider.notifier).addLog(
+                  plantId: widget.plant.id,
+                  description: txtCtrl.text,
+                  tagType: tags,
+                  createdAt: dateTime,
+                  image: file == null ? null : File(file!.path),
+                );
+          } else {
+            ref.watch(plantListProvider.notifier).editLog(
+                  plant: widget.plant,
+                  log: widget.log!,
+                  description: txtCtrl.text,
+                  tagType: tags,
+                  createdAt: dateTime,
+                  image: file == null ? null : File(file!.path),
+                );
+          }
           Navigator.of(context).pop();
         },
       ),

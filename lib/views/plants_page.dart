@@ -77,10 +77,7 @@ class PlantsPage extends ConsumerWidget {
                                 onPressed: () {
                                   Navigator.of(context).pushNamed(
                                     PlantLogEditPage.pageUrl,
-                                    arguments: {
-                                      'plant': plants[index],
-                                      'mode': LogEditMode.add,
-                                    },
+                                    arguments: {'plant': plants[index]},
                                   );
                                   // write log
                                 },

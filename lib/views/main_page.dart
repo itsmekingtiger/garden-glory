@@ -38,10 +38,7 @@ class MainPage extends ConsumerWidget {
           flex: 1,
           onPressed: (context) => Navigator.of(context).pushNamed(
             PlantLogEditPage.pageUrl,
-            arguments: {
-              'plant': plant,
-              'mode': LogEditMode.add,
-            },
+            arguments: {'plant': plant},
           ),
           backgroundColor: Color(0xFF386641),
           foregroundColor: Colors.white,

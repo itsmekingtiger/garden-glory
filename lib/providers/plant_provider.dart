@@ -74,6 +74,43 @@ class PlantList extends StateNotifier<List<Plant>> {
     ];
   }
 
+  void editLog({
+    required Plant plant,
+    required PlantLog log,
+    required String description,
+    required Set<TagType> tagType,
+    required DateTime createdAt,
+    File? image,
+  }) {
+    final pid = plant.id;
+    final newLog = PlantLog(id: log.id, text: description, tagType: tagType, createdAt: createdAt, image: image);
+
+    state = [
+      for (final plant in state)
+        if (plant.id == pid)
+          plant.copyWith(
+            logs: [...plant.logs..remove(log), newLog]..sort((a, b) => a.createdAt.difference(b.createdAt).inDays),
+          )
+        else
+          plant,
+    ];
+
+    state = state;
+  }
+
+  void removeLog({
+    required Plant plant,
+    required PlantLog log,
+  }) {
+    final pId = plant.id;
+    plant.logs.remove(log);
+
+    state = [
+      for (final plant in state)
+        if (plant.id == pId) plant.copyWith(logs: plant.logs) else plant,
+    ];
+  }
+
   void remove(Plant target) {
     state = state.where((todo) => todo.id != target.id).toList();
   }

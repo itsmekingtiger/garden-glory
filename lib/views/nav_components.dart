@@ -5,7 +5,7 @@ import 'package:brown_brown/views/root_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-AppBar SubPageAppBar(BuildContext context, String title) {
+AppBar SubPageAppBar(BuildContext context, String title, {List<Widget>? actions}) {
   return AppBar(
     elevation: 0,
     // backgroundColor: Colors.transparent,
@@ -13,6 +13,7 @@ AppBar SubPageAppBar(BuildContext context, String title) {
       icon: Icon(Icons.chevron_left),
       onPressed: () => Navigator.of(context).pop(),
     ),
+    actions: actions,
     title: Text(title),
   );
 }

@@ -46,10 +46,16 @@ class MyApp extends StatelessWidget {
         NewPlantPage.pageUrl: (context) => NewPlantPage(),
         NewPlanSetWateringPage.pageUrl: (context) => NewPlanSetWateringPage(),
         PlantDetailPage.pageUrl: (context) => PlantDetailPage(),
-        EditPlantPage.pageUrl: (context) =>
-            EditPlantPage(plantId: (ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>)['plantId']),
-        PlantLogEditPage.pageUrl: (context) => PlantLogEditPage(),
+        EditPlantPage.pageUrl: (context) => EditPlantPage(plantId: _args(context, 'plantId')),
+        PlantLogEditPage.pageUrl: (context) => PlantLogEditPage(
+              plant: _args(context, 'plant'),
+              log: _args(context, 'log'),
+            ),
       },
     );
+  }
+
+  _args(BuildContext context, String key) {
+    return (ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?)?[key];
   }
 }

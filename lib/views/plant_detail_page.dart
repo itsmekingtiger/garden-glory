@@ -6,6 +6,7 @@ import 'package:brown_brown/ui/buttons.dart';
 import 'package:brown_brown/ui/colors.dart';
 import 'package:brown_brown/ui/styles.dart';
 import 'package:brown_brown/views/edit_plant_page.dart';
+import 'package:brown_brown/views/plant_log_edit_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +37,7 @@ class PlantDetailPage extends ConsumerWidget {
               childCount: plant.logs.length,
               (context, index) {
                 final log = plant.logs.reversed.toList()[index];
-                return GloryTimeLineItem(log: log);
+                return GloryTimeLineItem(plant: plant, log: log);
               },
             ),
           ),
@@ -156,14 +157,16 @@ class _ActionButton extends StatelessWidget {
 ///
 /// https://stackoverflow.com/a/50665520
 class GloryTimeLineItem extends StatelessWidget {
-  const GloryTimeLineItem({super.key, required this.log});
+  const GloryTimeLineItem({super.key, required this.plant, required this.log});
 
+  final Plant plant;
   final PlantLog log;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
+        // contents
         Padding(
           padding: const EdgeInsets.only(left: 20.0),
           child: Container(
@@ -171,30 +174,10 @@ class GloryTimeLineItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(log.date, style: Theme.of(context).textTheme.headline6),
-                    GloryTinyTextButton(onPressed: () {}, text: 'Edit'),
-                  ],
-                ),
+                drawDateTitleAndEditButton(context),
                 VSpace.sm,
                 if (log.image != null) ...[Image(image: FileImage(log.image!)), VSpace.sm],
-                Row(children: [
-                  ...log.tagType
-                      .map((e) => Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Chip(
-                              label: Text(
-                                e.translateKR,
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: tossButtonFg),
-                              ),
-                              visualDensity: visualDensityMin,
-                              backgroundColor: tossButtonBg,
-                            ),
-                          ))
-                      .toList(),
-                ]),
+                drawTagChips(context),
                 VSpace.sm,
                 Text(log.text),
               ],
@@ -220,6 +203,43 @@ class GloryTimeLineItem extends StatelessWidget {
             decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.teal),
           ),
         )
+      ],
+    );
+  }
+
+  Row drawTagChips(BuildContext context) {
+    return Row(children: [
+      ...log.tagType
+          .map((e) => Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Chip(
+                  label: Text(
+                    e.translateKR,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: tossButtonFg),
+                  ),
+                  visualDensity: visualDensityMin,
+                  backgroundColor: tossButtonBg,
+                ),
+              ))
+          .toList(),
+    ]);
+  }
+
+  Row drawDateTitleAndEditButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(log.date, style: Theme.of(context).textTheme.headline6),
+        GloryTinyTextButton(
+          onPressed: () => Navigator.of(context).pushNamed(
+            PlantLogEditPage.pageUrl,
+            arguments: {
+              'plant': plant,
+              'log': log,
+            },
+          ),
+          text: '수정',
+        ),
       ],
     );
   }

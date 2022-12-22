@@ -185,7 +185,7 @@ class GloryTimeLineItem extends StatelessWidget {
                 if (log.image != null) ...[Image(image: FileImage(File(log.image!))), VSpace.sm],
                 drawTagChips(context),
                 VSpace.sm,
-                Text(log.text),
+                Text(log.text, style: Theme.of(context).textTheme.bodyMedium),
               ],
             ),
           ),
@@ -235,7 +235,7 @@ class GloryTimeLineItem extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(log.date, style: Theme.of(context).textTheme.headline6),
+        Text(log.date, style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600)),
         GloryTinyTextButton(
           onPressed: () => Navigator.of(context).pushNamed(
             PlantLogEditPage.pageUrl,

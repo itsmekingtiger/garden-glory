@@ -36,7 +36,7 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
 
     nameCtrl = TextEditingController(text: plant.name);
     wateringCtrl = TextEditingController(text: plant.wateringEvery.toString());
-    file = plant.profileImage;
+    if (plant.profileImage != null) file = File(plant.profileImage!);
   }
 
   @override
@@ -131,7 +131,7 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
           id: widget.plantId,
           name: nameCtrl.text,
           wateringEvery: int.parse(wateringCtrl.text),
-          profileImage: file,
+          profileImage: file?.path,
         );
 
     Navigator.of(context).pop();

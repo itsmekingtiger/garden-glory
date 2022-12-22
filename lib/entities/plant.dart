@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
-
 import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show immutable;
@@ -11,7 +8,7 @@ class Plant {
   final String name;
   final List<PlantLog> logs;
   final int wateringEvery;
-  final File? profileImage;
+  final String? profileImage;
 
   const Plant({
     required this.id,
@@ -44,7 +41,7 @@ class Plant {
     String? name,
     List<PlantLog>? logs,
     int? wateringEvery,
-    File? profileImage,
+    String? profileImage,
   }) {
     return Plant(
       id: id ?? this.id,
@@ -80,7 +77,7 @@ class PlantLog {
   final String text;
   final Set<TagType> tagType;
   final DateTime createdAt;
-  final File? image;
+  final String? image;
 
   const PlantLog({
     required this.id,
@@ -97,7 +94,7 @@ class PlantLog {
     String? text,
     Set<TagType>? tagType,
     DateTime? createdAt,
-    File? profileImage,
+    String? profileImage,
   }) {
     return PlantLog(
       id: id ?? this.id,

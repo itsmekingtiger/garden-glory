@@ -143,16 +143,14 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
     final args = ModalRoute.of(context)!.settings.arguments as _WateringArgs;
 
     Future<void> createNewPlant(int period) async {
-      File? profileImage;
-
       if (args.image_path != null && args.image_path!.isNotEmpty) {
-        profileImage = await imageManager.save(File(args.image_path!));
+        imageManager.save(File(args.image_path!));
       }
 
       ref.read(plantListProvider.notifier).add(
             name: args.name,
             wateringEvery: period,
-            profileImage: profileImage,
+            profileImage: args.image_path,
           );
 
       // FIXME: Is it safe approach?

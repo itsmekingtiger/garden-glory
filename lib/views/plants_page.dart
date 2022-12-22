@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/styles.dart';
@@ -50,8 +52,9 @@ class PlantsPage extends ConsumerWidget {
                           child: Row(
                             children: [
                               CircleAvatar(
-                                backgroundImage:
-                                    plants[index].profileImage == null ? null : FileImage(plants[index].profileImage!),
+                                backgroundImage: plants[index].profileImage == null
+                                    ? null
+                                    : FileImage(File(plants[index].profileImage!)),
                               ),
                               // name, species, last event
                               HSpace.md,

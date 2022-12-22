@@ -23,7 +23,7 @@ class PlantList extends StateNotifier<List<Plant>> {
   void add({
     required String name,
     required int wateringEvery,
-    File? profileImage,
+    String? profileImage,
   }) {
     state = [
       ...state,
@@ -41,7 +41,7 @@ class PlantList extends StateNotifier<List<Plant>> {
     required String id,
     String? name,
     int? wateringEvery,
-    File? profileImage,
+    String? profileImage,
   }) {
     state = [
       for (final plant in state)
@@ -61,7 +61,7 @@ class PlantList extends StateNotifier<List<Plant>> {
     required String description,
     required Set<TagType> tagType,
     required DateTime createdAt,
-    File? image,
+    String? image,
   }) {
     final log = PlantLog(id: _uuid.v4(), text: description, tagType: tagType, createdAt: createdAt, image: image);
 
@@ -80,7 +80,7 @@ class PlantList extends StateNotifier<List<Plant>> {
     required String description,
     required Set<TagType> tagType,
     required DateTime createdAt,
-    File? image,
+    String? image,
   }) {
     final pid = plant.id;
     final newLog = PlantLog(id: log.id, text: description, tagType: tagType, createdAt: createdAt, image: image);

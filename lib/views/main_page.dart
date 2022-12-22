@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:brown_brown/entities/plant.dart';
+import 'package:brown_brown/entities/plantlog.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';

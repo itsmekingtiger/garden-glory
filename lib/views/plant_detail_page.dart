@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:brown_brown/entities/plant.dart';
+import 'package:brown_brown/entities/plantlog.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/buttons.dart';
 import 'package:brown_brown/ui/colors.dart';

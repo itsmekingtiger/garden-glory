@@ -94,8 +94,10 @@ class PlantList extends StateNotifier<List<Plant>> {
     final pid = plant.id;
     final newLog = PlantLog(id: log.id, text: description, tags: tags, createdAt: createdAt, image: image);
 
-    final newPlant =
-        plant.copyWith(logs: [...plant.logs, newLog]..sort((a, b) => a.createdAt.difference(b.createdAt).inDays));
+    final newLogList = plant.logs.map((l) => l.id == log.id ? newLog : l).toList()
+      ..sort((a, b) => a.createdAt.difference(b.createdAt).inDays);
+
+    final newPlant = plant.copyWith(logs: newLogList);
 
     state = [
       for (final plant in state)

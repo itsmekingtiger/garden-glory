@@ -108,7 +108,6 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
           height: 50 + MediaQuery.of(context).viewPadding.bottom,
           color: Theme.of(context).primaryColor,
           alignment: Alignment.center,
-          padding: EdgeInsets.all(Insets.lg),
           child: Text(
             '수정',
             style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),

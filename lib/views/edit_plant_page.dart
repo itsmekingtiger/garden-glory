@@ -7,6 +7,7 @@ import 'package:brown_brown/ui/glory_image_picker.dart';
 import 'package:brown_brown/ui/inputs.dart';
 import 'package:brown_brown/ui/styles.dart';
 import 'package:brown_brown/views/nav_components.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -42,7 +43,14 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SubPageAppBar(context, 'Brown Brown'),
+      appBar: SubPageAppBar(context, 'Brown Brown', actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              ref.watch(plantListProvider.notifier).removePlant(plant);
+            },
+            icon: Icon(CupertinoIcons.trash))
+      ]),
       body: Column(
         children: <Widget>[
           VSpace.xl,

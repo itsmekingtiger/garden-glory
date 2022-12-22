@@ -211,7 +211,7 @@ class GloryTimeLineItem extends StatelessWidget {
 
   Row drawTagChips(BuildContext context) {
     return Row(children: [
-      ...log.tagType
+      ...log.tags
           .map((e) => Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Chip(

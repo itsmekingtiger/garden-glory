@@ -1,4 +1,6 @@
 import 'package:brown_brown/entities/plant.dart';
+import 'package:brown_brown/entities/plantlog.dart';
+import 'package:brown_brown/entities/tag_type.dart';
 import 'package:brown_brown/views/edit_plant_page.dart';
 import 'package:brown_brown/views/new_plant_page.dart';
 import 'package:brown_brown/views/plant_detail_page.dart';
@@ -13,7 +15,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(PlantAdapter());
-  await Hive.openBox<PlantAdapter>('plantBox');
+  Hive.registerAdapter(PlantLogAdapter());
+  Hive.registerAdapter(TagTypeAdapter());
+  await Hive.openBox('plantBox');
 
   // database
   runApp(

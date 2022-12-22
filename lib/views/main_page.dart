@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/entities/plantlog.dart';
+import 'package:brown_brown/entities/tag_type.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';
@@ -54,7 +55,7 @@ class MainPage extends ConsumerWidget {
             ref.watch(plantListProvider.notifier).addLog(
                   plantId: plant.id,
                   description: '물을 줬어요',
-                  tagType: {TagType.watering},
+                  tags: {TagType.watering},
                   createdAt: DateTime.now(),
                 );
           },

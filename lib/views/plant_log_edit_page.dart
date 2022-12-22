@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/entities/plantlog.dart';
+import 'package:brown_brown/entities/tag_type.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/buttons.dart';
 import 'package:brown_brown/ui/colors.dart';
@@ -43,7 +44,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
       id = widget.log!.id;
       txtCtrl = TextEditingController(text: widget.log!.text);
       dateTime = widget.log!.createdAt;
-      tags = widget.log!.tagType;
+      tags = widget.log!.tags;
       file = widget.log!.image;
     } else {
       txtCtrl = TextEditingController(text: '');
@@ -223,7 +224,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
             ref.watch(plantListProvider.notifier).addLog(
                   plantId: widget.plant.id,
                   description: txtCtrl.text,
-                  tagType: tags,
+                  tags: tags,
                   createdAt: dateTime,
                   image: file,
                 );
@@ -232,7 +233,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
                   plant: widget.plant,
                   log: widget.log!,
                   description: txtCtrl.text,
-                  tagType: tags,
+                  tags: tags,
                   createdAt: dateTime,
                   image: file,
                 );

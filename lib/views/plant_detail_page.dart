@@ -57,12 +57,10 @@ class PlantDetailPage extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     final subtitleStyle = textTheme.bodyMedium!.copyWith(
       color: Colors.white,
-      backgroundColor: Color(0xFF808000),
     );
     final titleStyle = textTheme.headline4!.copyWith(
       color: Colors.white,
       fontWeight: FontWeight.bold,
-      backgroundColor: Color(0xFF808000),
     );
 
     return SliverAppBar(
@@ -87,13 +85,19 @@ class PlantDetailPage extends ConsumerWidget {
             Positioned(
               left: Insets.md,
               bottom: 28,
-              child: Text(plant.name, style: titleStyle),
+              child: Container(
+                color: Color(0xFF808000),
+                child: Text(plant.name, style: titleStyle),
+              ),
             ),
             // FIXME: Plant에 CreatedAt 추가
             Positioned(
               left: Insets.md,
               bottom: Insets.md,
-              child: drawDaysWithForText(plant, subtitleStyle),
+              child: Container(
+                color: Color(0xFF808000),
+                child: drawDaysWithForText(plant, subtitleStyle),
+              ),
             ),
           ],
         ),

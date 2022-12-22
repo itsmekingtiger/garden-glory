@@ -52,12 +52,7 @@ class _RootPageState extends ConsumerState {
       ),
 
       // TODO: App logo
-      title: Text(title,
-          style: GoogleFonts.poiretOne().copyWith(
-            fontSize: 36,
-            color: Colors.black,
-            // fontWeight: FontWeight.w800,
-          )),
+      title: Text(title, style: TextStyle(fontFamily: 'PoiretOne', fontSize: 36, color: Colors.black)),
     );
   }
 

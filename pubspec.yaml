@@ -48,7 +48,17 @@ flutter:
   uses-material-design: true
   assets:
     - assets/lottie/
-
+  fonts:
+    - family: PoiretOne
+      fonts:
+        - asset: assets/fonts/PoiretOne-Regular.ttf
+    - family: NanumGothic
+      fonts:
+        - asset: assets/fonts/NanumGothic-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/NanumGothic-ExtraBold.ttf
+          weight: 900
+        - asset: assets/fonts/NanumGothic-Regular.ttf
 flutter_icons:
   android: "launcher_icon"
   ios: true

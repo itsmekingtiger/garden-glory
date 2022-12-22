@@ -8,7 +8,6 @@ import 'package:brown_brown/views/plant_log_edit_page.dart';
 import 'package:brown_brown/views/root_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -36,7 +35,7 @@ class MyApp extends StatelessWidget {
       title: 'brown brwon',
       theme: ThemeData(
         primarySwatch: Colors.teal,
-        textTheme: GoogleFonts.nanumGothicTextTheme(),
+        fontFamily: 'NanumGothic',
       ),
       home: RootPage(),
       debugShowCheckedModeBanner: false,

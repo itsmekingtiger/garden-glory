@@ -147,7 +147,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
         imageManager.save(File(args.image_path!));
       }
 
-      ref.read(plantListProvider.notifier).add(
+      ref.read(plantListProvider.notifier).addPlant(
             name: args.name,
             wateringEvery: period,
             profileImage: args.image_path,

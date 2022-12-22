@@ -127,7 +127,7 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
       return alert('물주기에 올바른 숫자를 입력하세요.');
     }
 
-    ref.watch(plantListProvider.notifier).editPlantDetail(
+    ref.watch(plantListProvider.notifier).editPlant(
           id: widget.plantId,
           name: nameCtrl.text,
           wateringEvery: int.parse(wateringCtrl.text),

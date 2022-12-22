@@ -19,7 +19,7 @@ final needToWateringProvider = Provider<List<Plant>>((ref) {
 class PlantList extends StateNotifier<List<Plant>> {
   PlantList([List<Plant>? initialTodos]) : super(initialTodos ?? []);
 
-  void add({
+  void addPlant({
     required String name,
     required int wateringEvery,
     String? profileImage,
@@ -36,7 +36,7 @@ class PlantList extends StateNotifier<List<Plant>> {
     ];
   }
 
-  void editPlantDetail({
+  void editPlant({
     required String id,
     String? name,
     int? wateringEvery,
@@ -53,6 +53,10 @@ class PlantList extends StateNotifier<List<Plant>> {
         else
           plant,
     ];
+  }
+
+  void removePlant(Plant target) {
+    state = state.where((todo) => todo.id != target.id).toList();
   }
 
   void addLog({
@@ -108,9 +112,5 @@ class PlantList extends StateNotifier<List<Plant>> {
       for (final plant in state)
         if (plant.id == pId) plant.copyWith(logs: plant.logs) else plant,
     ];
-  }
-
-  void remove(Plant target) {
-    state = state.where((todo) => todo.id != target.id).toList();
   }
 }

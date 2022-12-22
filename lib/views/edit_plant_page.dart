@@ -46,6 +46,10 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
       appBar: SubPageAppBar(context, 'Brown Brown', actions: [
         IconButton(
             onPressed: () {
+              // FIXME: PlantDetailPage에서 plant가 없기 때문에 에러 발생.
+              // 프로덕션 빌드에서는 큰 문제가 없지만 디버깅에서는 브레이크가 걸림.
+              // 이 페이지는 MainPage와 PlantsPage에서 접근 가능하기 때문에 popuntil도 사용하기 곤란.
+              Navigator.of(context).pop();
               Navigator.of(context).pop();
               ref.watch(plantListProvider.notifier).removePlant(plant);
             },

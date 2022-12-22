@@ -1,16 +1,105 @@
-# brown_brown
+# Garden Glory
 
-A new Flutter project.
+Code name brown-brown, alternative of 그린그린.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+Our goal
+* 오프라인 퍼스트
+* 무광고
+* 오픈소스
+* 지속 가능성(최소한 망해서 데이터 날리는 일 없게)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+_NOT_ our goal
+* 국제화
+* 서버
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Feature
+
+* 식물 등록
+* 식물에 기록 등록
+* 통계 제공
+* 물/비료 주기 알림
+* Export/Import
+
+
+
+# Posts 1
+
+그린그린 대체품 만듦.
+
+아직 열화판 수준.
+
+아이콘은 DALL·E 2가 뽑아줬음.
+
+
+로컬퍼스트
+==========
+
+그린그린과 가장 큰 차이점으로 로컬 퍼스트 앱이라는 걸 꼽을 수 있음.
+논리적이든 물리적이든 서버는 존재하지 않고 모든 데이터를 휴대폰에 저장함.
+외부와는 일절 통신하지 않음. (웹폰트 받아오는등의 통신을 제외하면)
+
+로컬 퍼스트로 개발하는 이유:
+* 서버 개발 할 시간 없고 연동 작업 귀찮음
+* 서버 제대로 안만듦면 느림
+* 서버 비용 듦
+* 내 데이터를 남이 관리하도록 하는것이 싫음(내가 남 데이터 관리하는것도)
+
+로컬 퍼스트로 개발하면 다음과 같은 이점을 얻을 수 있음:
+* 망할 걱정 X
+* 반응성 빠름
+
+단점도 있음:
+* 휴대폰 고장나면 데이터도 쓰봉행
+* 휴대폰 용량 많이 먹음
+
+단점 중 전자는 백업 기능을 넣고 후자는 이미지 압축 기능을 넣어서 완화할꺼임.
+
+
+장기계획
+========
+
+대량 1만 LOC 정도의 공수로 계산하고 있음.
+
+매일 100 라인 정도만 짜고 있으니 3달 걸릴거 같음.
+
+대량 세 페이즈로 나눠서 개발할꺼임. 지금은 페이즈 1이고.
+
+Phase 1: 러프하게 기능 위주 개발.
+Phase 2: 안드로이드 대상으로 apk 배포, 리펙터링 진행.
+Phase 3: 오픈소스화, 메인테이너 구해서 안드/애플 공앱 출시, UI 개선.
+
+Feature request 안받음, PR은 환영.
+
+
+용량
+====
+
+지금은 압축 기능이 없음.
+사진 한장에 2MB라고 하고, 10개 식물을 가진 사람이 메일 식물마다 사진 한장씩 포스팅 하면 1년에 10Pic/day * 365day * 2MB/Pic ~= 7.3GB
+3년 넘게 쓴다고 생각하면 상당히 부담되는 용량임.
+리사이즈 기능 넣어서 500KB 수준으로 줄이면 2GB 수준으로 억제 가능할듯.
+
+
+서버
+====
+
+위에서 서버 없다고 설레발을 쳤지만 백업을 위해 간단한 프로그램 정도는 만들 생각.
+그냥 통째로 압축해서 내보내기할까 FTP 같은거를 지원할까 고민했는데 간단한 프로그램 하나 만드는게 싸게 먹힐거 같음.
+SSDP로 서버 찾아서 전체 DB랑 이미지 import/export 하게 할것임.
+
+사실 _진짜_ 서버 기능을 추가하고 싶긴 함. 로컬 퍼스트가 기본인데 옵션으로 서버를 쓸 수 있는거지.
+그런데 서버가 나오게 되면 Rpi같은거 사다가 셀프 호스팅 해야 할꺼임.
+가능할진 모르겠는데 나는 Immich 쓰고 있어서 이미지는 여기다 저장하는거로 개발하고 싶음.
+
+
+지속 가능성
+========
+
+안드로이드 한정 망할 걱정없음.
+로컬 퍼스트 앱이기 때문에 한번 깔면 계속 쓸 수 있음.
+아이폰은 공앱에 등록하려면 개발자 계정값으로 매년 13만원 들고 안내면 앱도 내려가는데 내가 앱개발자가 아니라 애플은 안할듯.
+위에도 썼지만 메인테이너 구해지면 그 사람이 해주지 않을까?
+

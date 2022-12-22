@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:brown_brown/entities/plant.dart';
+import 'package:brown_brown/entities/plantlog.dart';
 import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -20,10 +19,10 @@ final needToWateringProvider = Provider<List<Plant>>((ref) {
 class PlantList extends StateNotifier<List<Plant>> {
   PlantList([List<Plant>? initialTodos]) : super(initialTodos ?? []);
 
-  void add({
+  void addPlant({
     required String name,
     required int wateringEvery,
-    File? profileImage,
+    String? profileImage,
   }) {
     state = [
       ...state,
@@ -37,11 +36,11 @@ class PlantList extends StateNotifier<List<Plant>> {
     ];
   }
 
-  void editPlantDetail({
+  void editPlant({
     required String id,
     String? name,
     int? wateringEvery,
-    File? profileImage,
+    String? profileImage,
   }) {
     state = [
       for (final plant in state)
@@ -56,12 +55,16 @@ class PlantList extends StateNotifier<List<Plant>> {
     ];
   }
 
+  void removePlant(Plant target) {
+    state = state.where((todo) => todo.id != target.id).toList();
+  }
+
   void addLog({
     required String plantId,
     required String description,
     required Set<TagType> tagType,
     required DateTime createdAt,
-    File? image,
+    String? image,
   }) {
     final log = PlantLog(id: _uuid.v4(), text: description, tagType: tagType, createdAt: createdAt, image: image);
 
@@ -80,7 +83,7 @@ class PlantList extends StateNotifier<List<Plant>> {
     required String description,
     required Set<TagType> tagType,
     required DateTime createdAt,
-    File? image,
+    String? image,
   }) {
     final pid = plant.id;
     final newLog = PlantLog(id: log.id, text: description, tagType: tagType, createdAt: createdAt, image: image);
@@ -109,9 +112,5 @@ class PlantList extends StateNotifier<List<Plant>> {
       for (final plant in state)
         if (plant.id == pId) plant.copyWith(logs: plant.logs) else plant,
     ];
-  }
-
-  void remove(Plant target) {
-    state = state.where((todo) => todo.id != target.id).toList();
   }
 }

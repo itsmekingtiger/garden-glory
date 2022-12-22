@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:brown_brown/entities/plant.dart';
+import 'package:brown_brown/entities/plantlog.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/buttons.dart';
 import 'package:brown_brown/ui/colors.dart';
@@ -80,7 +82,7 @@ class PlantDetailPage extends ConsumerWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 280,
-                child: Image.file(plant.profileImage!, fit: BoxFit.cover),
+                child: Image.file(File(plant.profileImage!), fit: BoxFit.cover),
               ),
             Positioned(
               left: Insets.md,
@@ -176,7 +178,7 @@ class GloryTimeLineItem extends StatelessWidget {
               children: [
                 drawDateTitleAndEditButton(context),
                 VSpace.sm,
-                if (log.image != null) ...[Image(image: FileImage(log.image!)), VSpace.sm],
+                if (log.image != null) ...[Image(image: FileImage(File(log.image!))), VSpace.sm],
                 drawTagChips(context),
                 VSpace.sm,
                 Text(log.text),

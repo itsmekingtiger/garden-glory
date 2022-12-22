@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:brown_brown/entities/plant.dart';
+import 'package:brown_brown/entities/plantlog.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';
@@ -63,7 +66,7 @@ class MainPage extends ConsumerWidget {
       ]),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: plant.profileImage == null ? null : FileImage(plant.profileImage!),
+          backgroundImage: plant.profileImage == null ? null : FileImage(File(plant.profileImage!)),
         ),
         visualDensity: VisualDensity.compact,
         title: Text(plant.name),

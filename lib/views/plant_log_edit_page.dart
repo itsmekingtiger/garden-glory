@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:brown_brown/entities/plant.dart';
+import 'package:brown_brown/entities/plantlog.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/ui/buttons.dart';
 import 'package:brown_brown/ui/colors.dart';
@@ -32,7 +33,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
   late TextEditingController txtCtrl;
   DateTime dateTime = DateTime.now();
   Set<TagType> tags = <TagType>{};
-  File? file;
+  String? file;
 
   @override
   void initState() {
@@ -79,7 +80,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
           ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 20),
             leading: CircleAvatar(
-              backgroundImage: widget.plant.profileImage == null ? null : FileImage(widget.plant.profileImage!),
+              backgroundImage: widget.plant.profileImage == null ? null : FileImage(File(widget.plant.profileImage!)),
             ),
             title: Text(widget.plant.name),
             subtitle: Row(
@@ -195,7 +196,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
                     onPressed: () async {
                       showGloryImagePicker(
                         context,
-                        (file) => setState(() => this.file = file),
+                        (file) => setState(() => this.file = file?.path),
                       );
                     },
                   ),
@@ -224,7 +225,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
                   description: txtCtrl.text,
                   tagType: tags,
                   createdAt: dateTime,
-                  image: file == null ? null : File(file!.path),
+                  image: file,
                 );
           } else {
             ref.watch(plantListProvider.notifier).editLog(
@@ -233,7 +234,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
                   description: txtCtrl.text,
                   tagType: tags,
                   createdAt: dateTime,
-                  image: file == null ? null : File(file!.path),
+                  image: file,
                 );
           }
           Navigator.of(context).pop();

@@ -21,7 +21,7 @@ class PlantAdapter extends TypeAdapter<Plant> {
       name: fields[1] as String,
       logs: (fields[2] as List).cast<PlantLog>(),
       wateringEvery: fields[3] as int,
-      profileImage: fields[4] as File?,
+      profileImage: fields[4] as String?,
     );
   }
 

@@ -1,7 +1,4 @@
-import 'dart:ffi';
-import 'dart:io';
-
-import 'package:brown_brown/utils/datetime_helper.dart';
+import 'package:brown_brown/entities/plantlog.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:hive/hive.dart';
@@ -20,7 +17,7 @@ class Plant {
   @HiveField(3)
   final int wateringEvery;
   @HiveField(4)
-  final File? profileImage;
+  final String? profileImage;
 
   const Plant({
     required this.id,
@@ -53,7 +50,7 @@ class Plant {
     String? name,
     List<PlantLog>? logs,
     int? wateringEvery,
-    File? profileImage,
+    String? profileImage,
   }) {
     return Plant(
       id: id ?? this.id,
@@ -61,59 +58,6 @@ class Plant {
       logs: logs ?? this.logs,
       wateringEvery: wateringEvery ?? this.wateringEvery,
       profileImage: profileImage ?? this.profileImage,
-    );
-  }
-}
-
-enum TagType {
-  today(0xFF00B3E6, '오늘'), // 🌞
-  watering(0xFF4361ee, '물'), // 💦
-  feeding(0xFFcb997e, '비료'), // 🍔
-  potChanging(0xFFF4C095, '분갈이'), // 🪴
-  newLeaf(0xFF6a994e, '신엽'), // 🍃
-  flower(0xFFFFFF99, '개화'), // 🌹
-  suffering(0xFF991AFF, '병충해'), //🐛
-  pesticide(0xFFED2F36, '농약'), // ☣️
-  germinated(0xFF00E680, '발아'), // 🌱
-  seeding(0xFF582f0e, '파종'); // 🚜
-
-  const TagType(this.color, this.translateKR);
-
-  final int color;
-  final String translateKR;
-}
-
-@immutable
-class PlantLog {
-  final String id;
-  final String text;
-  final Set<TagType> tagType;
-  final DateTime createdAt;
-  final File? image;
-
-  const PlantLog({
-    required this.id,
-    required this.text,
-    required this.tagType,
-    required this.createdAt,
-    required this.image,
-  });
-
-  String get date => formatDateTimeDow(createdAt);
-
-  PlantLog copyWith({
-    String? id,
-    String? text,
-    Set<TagType>? tagType,
-    DateTime? createdAt,
-    File? profileImage,
-  }) {
-    return PlantLog(
-      id: id ?? this.id,
-      text: text ?? this.text,
-      tagType: tagType ?? this.tagType,
-      createdAt: createdAt ?? this.createdAt,
-      image: profileImage ?? this.image,
     );
   }
 }

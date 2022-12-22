@@ -36,7 +36,7 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
 
     nameCtrl = TextEditingController(text: plant.name);
     wateringCtrl = TextEditingController(text: plant.wateringEvery.toString());
-    file = plant.profileImage;
+    if (plant.profileImage != null) file = File(plant.profileImage!);
   }
 
   @override
@@ -108,7 +108,6 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
           height: 50 + MediaQuery.of(context).viewPadding.bottom,
           color: Theme.of(context).primaryColor,
           alignment: Alignment.center,
-          padding: EdgeInsets.all(Insets.lg),
           child: Text(
             '수정',
             style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
@@ -128,11 +127,11 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
       return alert('물주기에 올바른 숫자를 입력하세요.');
     }
 
-    ref.watch(plantListProvider.notifier).editPlantDetail(
+    ref.watch(plantListProvider.notifier).editPlant(
           id: widget.plantId,
           name: nameCtrl.text,
           wateringEvery: int.parse(wateringCtrl.text),
-          profileImage: file,
+          profileImage: file?.path,
         );
 
     Navigator.of(context).pop();

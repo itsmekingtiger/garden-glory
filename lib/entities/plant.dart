@@ -4,13 +4,22 @@ import 'dart:io';
 import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:hive/hive.dart';
+
+part 'plant.g.dart';
 
 @immutable
+@HiveType(typeId: 0)
 class Plant {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final List<PlantLog> logs;
+  @HiveField(3)
   final int wateringEvery;
+  @HiveField(4)
   final File? profileImage;
 
   const Plant({

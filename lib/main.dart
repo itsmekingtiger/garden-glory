@@ -1,3 +1,4 @@
+import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/views/edit_plant_page.dart';
 import 'package:brown_brown/views/new_plant_page.dart';
 import 'package:brown_brown/views/plant_detail_page.dart';
@@ -6,19 +7,13 @@ import 'package:brown_brown/views/root_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // const databaseName = 'brown_brown.db';
-  // final database = await openDatabase(
-  //   databaseName,
-  //   version: 1,
-  //   onCreate: createDatabase,
-  // );
-
-  // await database.rawQuery(Queries.queriesAllPlants);
-  // await database.rawQuery(Queries.queriesAllPlantLogs);
+  await Hive.initFlutter();
+  Hive.registerAdapter(PlantAdapter());
+  await Hive.openBox<PlantAdapter>('plantBox');
 
   // database
   runApp(

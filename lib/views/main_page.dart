@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:brown_brown/entities/plant.dart';
-import 'package:brown_brown/entities/plantlog.dart';
 import 'package:brown_brown/entities/tag_type.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/utils/datetime_helper.dart';
@@ -36,7 +35,7 @@ class MainPage extends ConsumerWidget {
 
   Slidable drawWateringNotificationItem(Plant plant, WidgetRef ref) {
     return Slidable(
-      endActionPane: ActionPane(motion: ScrollMotion(), children: [
+      endActionPane: ActionPane(motion: DrawerMotion(), children: [
         SlidableAction(
           // An action can be bigger than the others.
           flex: 1,
@@ -76,19 +75,3 @@ class MainPage extends ConsumerWidget {
     );
   }
 }
-
-// class WateringNotificationSection extends StatelessWidget {
-//   const WateringNotificationSection(int plantId, {super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//       child: ListView.builder(
-//         itemCount: 10,
-//         itemBuilder: (context, index) {
-//           return PlantCard(plantId: index);
-//         },
-//       ),
-//     );
-//   }
-// }

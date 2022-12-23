@@ -76,7 +76,7 @@ class PlantsPage extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                              IconButton(
+                              CupertinoButton(
                                 onPressed: () {
                                   Navigator.of(context).pushNamed(
                                     PlantLogEditPage.pageUrl,
@@ -84,7 +84,7 @@ class PlantsPage extends ConsumerWidget {
                                   );
                                   // write log
                                 },
-                                icon: Icon(CupertinoIcons.pencil_outline),
+                                child: Icon(CupertinoIcons.pencil_outline),
                               ),
                             ],
                           ),

@@ -3,10 +3,10 @@ import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/utils/build_info.dart';
 import 'package:brown_brown/views/main_page.dart';
 import 'package:brown_brown/views/plants_page.dart';
+import 'package:brown_brown/views/third_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class RootPage extends ConsumerStatefulWidget {
   static const pageUrl = '/root_page';
@@ -37,7 +37,7 @@ class _RootPageState extends ConsumerState {
     return Scaffold(
       appBar: drawAppBar(context, 'Garden Glory'),
       drawer: drawDrawer(),
-      body: [MainPage(), PlantsPage()][pageIndex],
+      body: [MainPage(), PlantsPage(), ThirdPage()][pageIndex],
       bottomNavigationBar: drawNavigationBar(hasNotification),
     );
   }
@@ -108,7 +108,7 @@ class _RootPageState extends ConsumerState {
                 )
             ]),
             label: '알림'),
-        NavigationDestination(icon: Icon(CupertinoIcons.tree), label: '내 식물'),
+        NavigationDestination(icon: Image.asset('assets/icon/leaf.png', width: 24), label: '내 식물'),
         NavigationDestination(icon: Icon(CupertinoIcons.calendar), label: '캘린더'),
       ],
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,

@@ -7,6 +7,7 @@ import 'package:brown_brown/views/plant_detail_page.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';
 import 'package:brown_brown/views/root_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -37,6 +38,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
         fontFamily: 'NanumGothic',
       ),
+      localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+      supportedLocales: const [Locale('en'), Locale('ko')],
       home: RootPage(),
       debugShowCheckedModeBanner: false,
       routes: {

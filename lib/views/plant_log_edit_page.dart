@@ -100,6 +100,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
             ),
             onTap: () async {
               final date = await showDatePicker(
+                locale: Localizations.localeOf(context),
                 context: context,
                 initialDate: dateTime,
                 firstDate: firstDate,

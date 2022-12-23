@@ -1,5 +1,6 @@
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
+import 'package:brown_brown/utils/build_info.dart';
 import 'package:brown_brown/views/main_page.dart';
 import 'package:brown_brown/views/plants_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +19,14 @@ class RootPage extends ConsumerStatefulWidget {
 
 class _RootPageState extends ConsumerState {
   int pageIndex = 0;
+
+  String buildInfo = 'No build info';
+
+  @override
+  void initState() {
+    super.initState();
+    getBuildInfo().then((info) => setState(() => buildInfo = info['commitId'] ?? 'No build info'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,14 +77,17 @@ class _RootPageState extends ConsumerState {
               DrawerHeader(
                 child: Text('Drawer Header'),
               ),
-              ListTile(title: Text('설정'), onTap: () {}),
-              ListTile(title: Text('로그'), onTap: () {}),
+              ListTile(title: Text('Open source license'), onTap: () => showLicensePage(context: context)),
+              // ListTile(title: Text('로그'), onTap: () {}),
 
               // Import and Export
             ],
           ),
 
           // Server Client State
+
+          // Build info
+          Text('build: $buildInfo', style: Theme.of(context).textTheme.caption),
         ],
       ),
     );

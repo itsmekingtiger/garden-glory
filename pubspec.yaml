@@ -34,6 +34,7 @@ dependencies:
   flashy_tab_bar2: ^0.0.5
   fluttertoast: ^8.1.2
   flutter_slidable: ^2.0.0
+  package_info_plus: ^3.0.2
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +49,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/lottie/
+    # build info
+    - .git/HEAD
+    - .git/ORIG_HEAD
+    - .git/refs/heads/
+
   fonts:
     - family: PoiretOne
       fonts:
@@ -59,6 +65,7 @@ flutter:
         - asset: assets/fonts/NanumGothic-ExtraBold.ttf
           weight: 900
         - asset: assets/fonts/NanumGothic-Regular.ttf
+
 flutter_icons:
   android: "launcher_icon"
   ios: true

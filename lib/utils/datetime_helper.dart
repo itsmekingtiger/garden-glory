@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-String formatDow(DateTime dateTime) => '일월화수목금토'[dateTime.weekday];
+String formatDow(DateTime dateTime) => '일월화수목금토'[dateTime.weekday % 7];
 String formatDateTime(DateTime dateTime) => DateFormat('y-M-d').format(dateTime);
 String formatDateTimeDow(DateTime dateTime) => '${formatDateTime(dateTime)} ${formatDow(dateTime)}';
 

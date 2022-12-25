@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:brown_brown/images/image_manger.dart';
 import 'package:brown_brown/ui/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,7 +25,20 @@ class GloryImagePicker extends StatefulWidget {
 class _GloryImagePickerState extends State<GloryImagePicker> {
   Image? profileImage;
   final ImagePicker _picker = ImagePicker();
-  File? gloryImage;
+
+  VoidCallback _pickWith(source) {
+    return () async {
+      final f = await _picker.pickImage(source: source);
+
+      if (f == null) {
+        return;
+      }
+
+      final savedImage = await imageManager.save(File(f.path));
+
+      widget.onPicked(savedImage);
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,29 +53,20 @@ class _GloryImagePickerState extends State<GloryImagePicker> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Corners.lgRadius)),
-                leading: Icon(Icons.camera_alt),
-                title: Text('카메라'),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final f = await _picker.pickImage(source: ImageSource.camera);
-                  if (f != null) {
-                    gloryImage = File(f.path);
-                  }
-                  widget.onPicked(gloryImage);
-                },
-              ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Corners.lgRadius)),
+                  leading: Icon(Icons.camera_alt),
+                  title: Text('카메라'),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    _pickWith(ImageSource.camera)();
+                  }),
               ListTile(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Corners.lgRadius)),
                 leading: Icon(Icons.image),
                 title: Text('갤러리'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final f = await _picker.pickImage(source: ImageSource.gallery);
-                  if (f != null) {
-                    gloryImage = File(f.path);
-                  }
-                  widget.onPicked(gloryImage);
+                  _pickWith(ImageSource.gallery)();
                 },
               ),
             ],

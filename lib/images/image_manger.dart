@@ -1,8 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart' as libpath;
 import 'package:path_provider/path_provider.dart';
 
@@ -25,8 +27,34 @@ class ImageManager implements ImageLoaderSaver {
 
   @override
   Future<File> save(File original) async {
-    final content = await original.readAsBytes();
-    final fileName = md5.convert(content).toString();
+    Uint8List? compressedBytes;
+
+    // 압축을 시도하고
+    //   1. 압축된 크기가 원본보다 크거나
+    //   2. 압축에 실패하면
+    // 원본을 그대로 사용한다.
+    try {
+      final originalSize = await original.length();
+
+      compressedBytes = await FlutterImageCompress.compressWithFile(
+        original.absolute.path,
+        minWidth: 1920,
+        minHeight: 1920,
+        quality: 80,
+      );
+
+      log('compressed: $originalSize -> ${compressedBytes!.length}');
+
+      if (originalSize < compressedBytes.length) {
+        log('compressed size is bigger than original size. use original image.');
+        compressedBytes = await original.readAsBytes();
+      }
+    } catch (e) {
+      log('Error on compressing image: $e');
+      compressedBytes = await original.readAsBytes();
+    }
+
+    final fileName = md5.convert(compressedBytes).toString();
     final fullPath = await _getFullPath(_imageDir, fileName);
 
     final file = File(fullPath);
@@ -36,7 +64,7 @@ class ImageManager implements ImageLoaderSaver {
 
     await file.create(recursive: true);
 
-    return original.copy(fullPath);
+    return file.writeAsBytes(compressedBytes);
   }
 
   @override

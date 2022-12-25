@@ -221,10 +221,10 @@ class GloryTimeLineItem extends StatelessWidget {
                 child: Chip(
                   label: Text(
                     e.translateKR,
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: tossButtonFg),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: CustomColor.tosslightblue),
                   ),
                   visualDensity: visualDensityMin,
-                  backgroundColor: tossButtonBg,
+                  backgroundColor: CustomColor.tosslightblueAccent,
                 ),
               ))
           .toList(),

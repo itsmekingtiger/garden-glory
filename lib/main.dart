@@ -36,7 +36,6 @@ class MyApp extends StatelessWidget {
       title: 'brown brwon',
       theme: ThemeData(
         primarySwatch: Colors.teal,
-        fontFamily: 'NanumGothic',
       ),
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
       supportedLocales: const [Locale('en'), Locale('ko')],

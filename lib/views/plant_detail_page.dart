@@ -84,7 +84,7 @@ class PlantDetailPage extends ConsumerWidget {
               ),
             Positioned(
               left: Insets.md,
-              bottom: 28,
+              bottom: 31,
               child: Container(
                 color: Color(0xFF808000),
                 child: Text(plant.name, style: titleStyle),

@@ -6,7 +6,6 @@ import 'package:brown_brown/ui/styles.dart';
 import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:brown_brown/views/plant_detail_page.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,13 +20,6 @@ class PlantsPage extends ConsumerWidget {
 
     return Column(
       children: [
-        // Create New pant button
-        BrownActionButton(
-          callback: () => Navigator.pushNamed(context, '/new_plant'),
-          icon: Icon(Icons.add, color: Colors.grey[500]),
-          child: Text('식물 추가하기', style: Theme.of(context).textTheme.bodyText2),
-        ),
-
         // List of plants
         Expanded(
           child: ListView.builder(
@@ -67,6 +59,7 @@ class PlantsPage extends ConsumerWidget {
                                       style:
                                           Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
                                     ),
+                                    VSpace.xs,
                                     Text(
                                       mostRecentLog == null
                                           ? '아직 기록이 없어요'
@@ -76,7 +69,11 @@ class PlantsPage extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                              CupertinoButton(
+                              TextButton(
+                                style: ButtonStyle(
+                                  visualDensity: VisualDensity.compact,
+                                  backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[300]!),
+                                ),
                                 onPressed: () {
                                   Navigator.of(context).pushNamed(
                                     PlantLogEditPage.pageUrl,
@@ -84,7 +81,7 @@ class PlantsPage extends ConsumerWidget {
                                   );
                                   // write log
                                 },
-                                child: Icon(CupertinoIcons.pencil_outline),
+                                child: Text('글쓰기', style: Theme.of(context).textTheme.bodySmall),
                               ),
                             ],
                           ),
@@ -122,12 +119,12 @@ class BrownActionButton extends StatelessWidget {
         callback();
       },
       child: SizedBox(
-        height: 100,
+        // height: 100,
         child: Row(
           children: [
             Expanded(
               child: Container(
-                margin: EdgeInsets.all(10),
+                margin: EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(10),

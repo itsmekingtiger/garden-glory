@@ -6,6 +6,7 @@ import 'package:brown_brown/views/plants_page.dart';
 import 'package:brown_brown/views/third_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RootPage extends ConsumerStatefulWidget {
@@ -34,7 +35,15 @@ class _RootPageState extends ConsumerState {
 
     final List<Plant> plants = ref.watch(plantListProvider);
 
+    final fab = pageIndex == 1
+        ? FloatingActionButton(
+            onPressed: () => Navigator.pushNamed(context, '/new_plant'),
+            child: Icon(Icons.add),
+          )
+        : null;
+
     return Scaffold(
+      floatingActionButton: fab,
       appBar: drawAppBar(context, 'Garden Glory'),
       drawer: drawDrawer(),
       body: [MainPage(), PlantsPage(), ThirdPage()][pageIndex],

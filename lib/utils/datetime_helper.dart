@@ -27,8 +27,10 @@ String dateAgo(DateTime src, DateTime dst) {
     return '${diff.inDays ~/ 365}년 전';
   } else if (diff.inDays > 30) {
     return '${diff.inDays ~/ 30}달 전';
-  } else if (diff.inDays > 0) {
+  } else if (diff.inDays > 1) {
     return '${diff.inDays}일 전';
+  } else if (diff.inDays == 1) {
+    return '어제';
   } else {
     return '오늘';
   }

@@ -24,14 +24,7 @@ class PlantsPage extends ConsumerWidget {
         Expanded(
           child: ListView.builder(
             itemCount: plants.length,
-            itemBuilder: (context, index) {
-              return ZoomOutAnimationWrapper(
-                child: PlantListItem(
-                  isPressed: false,
-                  plant: plants[index],
-                ),
-              );
-            },
+            itemBuilder: (context, index) => ZoomOutAnimationWrapper(child: PlantListItem(plant: plants[index])),
           ),
         ),
       ],
@@ -58,6 +51,25 @@ class _ZoomOutAnimationWrapperState extends State<ZoomOutAnimationWrapper> with 
   bool isPressed = false;
 
   @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: CurvedAnimation(
+        parent: _animation,
+        curve: Interval(0, 1, curve: Curves.easeOut),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        child: Listener(
+          onPointerDown: pressed,
+          onPointerUp: canclePressed,
+          onPointerCancel: canclePressed,
+          child: withPressedFilter(widget.child),
+        ),
+      ),
+    );
+  }
+
+  @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 100));
@@ -71,43 +83,20 @@ class _ZoomOutAnimationWrapperState extends State<ZoomOutAnimationWrapper> with 
     _controller.dispose();
   }
 
-  void pressed(event) {
+  void pressed(PointerEvent event) {
     _controller.forward();
-    setState(() {
-      isPressed = true;
-    });
+    setState(() => isPressed = true);
   }
 
-  void canclePressed() {
+  void canclePressed(PointerEvent event) {
     _controller.reverse();
-    setState(() {
-      isPressed = false;
-    });
+    setState(() => isPressed = false);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: CurvedAnimation(
-        parent: _animation,
-        curve: Interval(0, 1, curve: Curves.easeOut),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        child: Listener(
-          onPointerDown: pressed,
-          onPointerUp: (event) => canclePressed(),
-          onPointerCancel: (event) => canclePressed(),
-          child: withPressedFilter(),
-        ),
-      ),
-    );
-  }
-
-  Widget withPressedFilter() {
+  Widget withPressedFilter(Widget child) {
     return ColorFiltered(
       colorFilter: isPressed ? ColorFilters.darkerAlphaScale : ColorFilters.noScale,
-      child: widget.child,
+      child: child,
     );
   }
 }
@@ -115,11 +104,9 @@ class _ZoomOutAnimationWrapperState extends State<ZoomOutAnimationWrapper> with 
 class PlantListItem extends StatelessWidget {
   const PlantListItem({
     Key? key,
-    required this.isPressed,
     required this.plant,
   }) : super(key: key);
 
-  final bool isPressed;
   final Plant plant;
 
   @override
@@ -137,7 +124,7 @@ class PlantListItem extends StatelessWidget {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
         visualDensity: VisualDensity.compact,
-        backgroundColor: MaterialStateProperty.all<Color>(isPressed ? Colors.grey[300]! : Colors.grey[200]!),
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200]!),
       ),
       onPressed: () {
         Navigator.of(context).pushNamed(
@@ -174,8 +161,7 @@ class PlantListItem extends StatelessWidget {
                   TextButton(
                     style: ButtonStyle(
                       visualDensity: VisualDensity.compact,
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(isPressed ? Colors.grey[200]! : Colors.grey[300]!),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[300]!),
                     ),
                     onPressed: () {
                       Navigator.of(context).pushNamed(

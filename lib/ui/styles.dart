@@ -147,6 +147,14 @@ class Insets {
 
 /// https://medium.com/@samarth_agarwal/turn-images-to-grayscale-in-flutter-the-colorfiltered-widget-16de44cf8045
 class ColorFilters {
+  static const noScale = ColorFilter.matrix(_noScale);
+  static const _noScale = <double>[
+    1, 0, 0, 0, 0, //
+    0, 1, 0, 0, 0, //
+    0, 0, 1, 0, 0, //
+    0, 0, 0, 1, 0, //
+  ];
+
   static const greyScale = ColorFilter.matrix(_greyScale);
   static const _greyScale = <double>[
     0.2126, 0.7152, 0.0722, 0, 0, //

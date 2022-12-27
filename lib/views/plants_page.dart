@@ -105,7 +105,10 @@ class _ZoomOutAnimationWrapperState extends State<ZoomOutAnimationWrapper> with 
   }
 
   Widget withPressedFilter() {
-    return isPressed ? ColorFiltered(colorFilter: ColorFilters.darkerAlphaScale, child: widget.child) : widget.child;
+    return ColorFiltered(
+      colorFilter: isPressed ? ColorFilters.darkerAlphaScale : ColorFilters.noScale,
+      child: widget.child,
+    );
   }
 }
 

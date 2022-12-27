@@ -25,7 +25,12 @@ class PlantsPage extends ConsumerWidget {
           child: ListView.builder(
             itemCount: plants.length,
             itemBuilder: (context, index) {
-              return _PlantListItem(plant: plants[index]);
+              return ZoomOutAnimationWrapper(
+                child: PlantListItem(
+                  isPressed: false,
+                  plant: plants[index],
+                ),
+              );
             },
           ),
         ),
@@ -34,19 +39,19 @@ class PlantsPage extends ConsumerWidget {
   }
 }
 
-class _PlantListItem extends StatefulWidget {
-  const _PlantListItem({
+class ZoomOutAnimationWrapper extends StatefulWidget {
+  const ZoomOutAnimationWrapper({
     Key? key,
-    required this.plant,
+    required this.child,
   }) : super(key: key);
 
-  final Plant plant;
+  final Widget child;
 
   @override
-  State<_PlantListItem> createState() => _PlantListItemState();
+  State<ZoomOutAnimationWrapper> createState() => _ZoomOutAnimationWrapperState();
 }
 
-class _PlantListItemState extends State<_PlantListItem> with SingleTickerProviderStateMixin {
+class _ZoomOutAnimationWrapperState extends State<ZoomOutAnimationWrapper> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -66,7 +71,7 @@ class _PlantListItemState extends State<_PlantListItem> with SingleTickerProvide
     _controller.dispose();
   }
 
-  void pressed() {
+  void pressed(event) {
     _controller.forward();
     setState(() {
       isPressed = true;
@@ -82,12 +87,6 @@ class _PlantListItemState extends State<_PlantListItem> with SingleTickerProvide
 
   @override
   Widget build(BuildContext context) {
-    final profileImage = widget.plant.profileImage == null ? null : FileImage(File(widget.plant.profileImage!));
-
-    final lastLogDate = widget.plant.mostRecentLog() == null
-        ? '아직 기록이 없어요'
-        : dateAgo(widget.plant.mostRecentLog()!.createdAt, kEndOfToday);
-
     return ScaleTransition(
       scale: CurvedAnimation(
         parent: _animation,
@@ -96,71 +95,101 @@ class _PlantListItemState extends State<_PlantListItem> with SingleTickerProvide
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         child: Listener(
-          onPointerDown: (event) => pressed(),
+          onPointerDown: pressed,
           onPointerUp: (event) => canclePressed(),
           onPointerCancel: (event) => canclePressed(),
-          child: TextButton(
-            style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
-              splashFactory: NoSplash.splashFactory,
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-              visualDensity: VisualDensity.compact,
-              backgroundColor: MaterialStateProperty.all<Color>(isPressed ? Colors.grey[300]! : Colors.grey[200]!),
-            ),
-            onPressed: () => Navigator.of(context).pushNamed(
-              '/plant_detail',
-              arguments: PlantDetailPageArgs(widget.plant.id),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.all(10),
-                    child: Row(
+          child: withPressedFilter(),
+        ),
+      ),
+    );
+  }
+
+  Widget withPressedFilter() {
+    return ColorFiltered(
+      colorFilter: isPressed ? ColorFilters.darkerAlphaScale : ColorFilters.noScale,
+      child: widget.child,
+    );
+  }
+}
+
+class PlantListItem extends StatelessWidget {
+  const PlantListItem({
+    Key? key,
+    required this.isPressed,
+    required this.plant,
+  }) : super(key: key);
+
+  final bool isPressed;
+  final Plant plant;
+
+  @override
+  Widget build(BuildContext context) {
+    final profileImage = plant.profileImage == null ? null : FileImage(File(plant.profileImage!));
+
+    final lastLogDate =
+        plant.mostRecentLog() == null ? '아직 기록이 없어요' : dateAgo(plant.mostRecentLog()!.createdAt, kEndOfToday);
+
+    return TextButton(
+      style: ButtonStyle(
+        overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        splashFactory: NoSplash.splashFactory,
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+        visualDensity: VisualDensity.compact,
+        backgroundColor: MaterialStateProperty.all<Color>(isPressed ? Colors.grey[300]! : Colors.grey[200]!),
+      ),
+      onPressed: () {
+        Navigator.of(context).pushNamed(
+          '/plant_detail',
+          arguments: PlantDetailPageArgs(plant.id),
+        );
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  CircleAvatar(backgroundImage: profileImage),
+
+                  // name, species, last event
+                  HSpace.md,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(backgroundImage: profileImage),
-
-                        // name, species, last event
-                        HSpace.md,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.plant.name,
-                                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              VSpace.xs,
-                              Text(lastLogDate, style: Theme.of(context).textTheme.bodySmall),
-                            ],
-                          ),
+                        Text(
+                          plant.name,
+                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
                         ),
-
-                        // write log button
-                        TextButton(
-                          style: ButtonStyle(
-                            visualDensity: VisualDensity.compact,
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(isPressed ? Colors.grey[200]! : Colors.grey[300]!),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              PlantLogEditPage.pageUrl,
-                              arguments: {'plant': widget.plant},
-                            );
-                          },
-                          child: Text('글쓰기', style: Theme.of(context).textTheme.bodySmall),
-                        ),
+                        VSpace.xs,
+                        Text(lastLogDate, style: Theme.of(context).textTheme.bodySmall),
                       ],
                     ),
                   ),
-                ),
-              ],
+
+                  // write log button
+                  TextButton(
+                    style: ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(isPressed ? Colors.grey[200]! : Colors.grey[300]!),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        PlantLogEditPage.pageUrl,
+                        arguments: {'plant': plant},
+                      );
+                    },
+                    child: Text('글쓰기', style: Theme.of(context).textTheme.bodySmall),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -149,26 +149,18 @@ class Insets {
 class ColorFilters {
   static const greyScale = ColorFilter.matrix(_greyScale);
   static const _greyScale = <double>[
-    0.2126,
-    0.7152,
-    0.0722,
-    0,
-    0,
-    0.2126,
-    0.7152,
-    0.0722,
-    0,
-    0,
-    0.2126,
-    0.7152,
-    0.0722,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
+    0.2126, 0.7152, 0.0722, 0, 0, //
+    0.2126, 0.7152, 0.0722, 0, 0, //
+    0.2126, 0.7152, 0.0722, 0, 0, //
+    0, 0, 0, 1, 0, //
+  ];
+
+  static const darkerAlphaScale = ColorFilter.matrix(_greyAlphaScale);
+  static const _greyAlphaScale = <double>[
+    0.9, 0, 0, 0, 0, //
+    0, 0.9, 0, 0, 0, //
+    0, 0, 0.9, 0, 0, //
+    0, 0, 0, 1, 0, //
   ];
 }
 

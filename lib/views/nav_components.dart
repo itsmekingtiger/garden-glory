@@ -52,3 +52,22 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 }
+
+// Software keyboard 등을 숨기기위해
+class Unfocusable extends StatelessWidget {
+  const Unfocusable({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (details) => FocusManager.instance.primaryFocus?.unfocus(),
+      behavior: HitTestBehavior.translucent,
+      child: child,
+    );
+  }
+}

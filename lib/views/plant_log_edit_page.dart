@@ -53,189 +53,192 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: SubPageAppBar(
-          context,
-          '오늘의 기록',
-          actions: widget.log == null
-              ? null
-              : [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-
-                        ref.watch(plantListProvider.notifier).removeLog(
-                              plant: widget.plant,
-                              log: widget.log!,
-                            );
-                      },
-                      icon: Icon(CupertinoIcons.trash))
-                ],
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            VSpace.md,
-
-            // 날짜
-            ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 20),
-              leading: CircleAvatar(
-                backgroundImage: widget.plant.profileImage == null ? null : FileImage(File(widget.plant.profileImage!)),
-              ),
-              title: Text(widget.plant.name),
-              subtitle: Row(
-                children: [
-                  Text(
-                    formatDateTime(dateTime),
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  HSpace.sm,
-                  if (isNotSameDate(dateTime, DateTime.now()))
-                    GloryTinyTextButton(
-                      onPressed: () => setState(() => dateTime = DateTime.now()),
-                      text: 'Set to today',
-                    )
-                ],
-              ),
-              onTap: () async {
-                final date = await showDatePicker(
-                  locale: Localizations.localeOf(context),
-                  context: context,
-                  initialDate: dateTime,
-                  firstDate: firstDate,
-                  lastDate: now,
-                );
-
-                if (date != null) {
-                  setState(() => dateTime = date);
-                }
-              },
-            ),
-
-            // 내용
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: '내용',
-                  alignLabelWithHint: true,
-                  floatingLabelAlignment: FloatingLabelAlignment.start,
-                ),
-                minLines: 5,
-                maxLines: 20,
-                controller: txtCtrl,
-              ),
-            ),
-
-            // 태그, 사진
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: SizedBox(
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          TextButton(
-                            child: Text('태그 편집'),
-                            onPressed: () async {
-                              /// Note:
-                              /// 안에서는 setState를 해도 showModalBottomSheet로 그린 위젯은 rerender 되지 않음.
-                              /// 이를 해결하기 위해서는 StatefulBuilder로 inner Widget을 감싸야함.
-                              /// 또한 setState를 StatefulBuilder.builder 콜백의 인자로 주어지는 또다른 setState로 감싸야함.
-                              showModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (context) => StatefulBuilder(
-                                  builder: (context, setOutterState) => Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: TagBottomSheet(
-                                        tags: tags,
-                                        toggle: (tag) {
-                                          tags.contains(tag)
-                                              ? setOutterState(() => setState(() {
-                                                    tags.remove(tag);
-                                                    tags = {...tags};
-                                                  }))
-                                              : setOutterState(() => setState(() {
-                                                    tags = {...tags, tag};
-                                                  }));
-                                        }),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          ...tags.map((tag) {
-                            final colorRaw = tag.color;
-                            final color = Color(colorRaw);
-                            final rgb = toRGB(colorRaw);
-                            final isLight = isLightColor(rgb[0], rgb[1], rgb[2]);
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 3),
-                              child: Chip(
-                                visualDensity: VisualDensity.compact,
-                                key: ValueKey(tag),
-                                label: Text(tag.translateKR,
-                                    style: TextStyle(color: isLight ? Colors.grey[800] : Colors.white)),
-                                deleteIconColor: isLight ? Colors.grey[800] : Colors.white,
-                                backgroundColor: color,
-                              ),
-                            );
-                          }).toList(),
-                        ],
-                      ),
-                    ),
+    return Unfocusable(
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: SubPageAppBar(
+            context,
+            '오늘의 기록',
+            actions: widget.log == null
+                ? null
+                : [
                     IconButton(
-                      constraints: BoxConstraints.tightFor(width: 40, height: 40),
-                      icon: Icon(CupertinoIcons.camera),
-                      onPressed: () async {
-                        showGloryImagePicker(
-                          context,
-                          (file) => setState(() => this.file = file?.path),
-                        );
-                      },
+                        onPressed: () {
+                          Navigator.of(context).pop();
+
+                          ref.watch(plantListProvider.notifier).removeLog(
+                                plant: widget.plant,
+                                log: widget.log!,
+                              );
+                        },
+                        icon: Icon(CupertinoIcons.trash))
+                  ],
+          ),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              VSpace.md,
+
+              // 날짜
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                leading: CircleAvatar(
+                  backgroundImage:
+                      widget.plant.profileImage == null ? null : FileImage(File(widget.plant.profileImage!)),
+                ),
+                title: Text(widget.plant.name),
+                subtitle: Row(
+                  children: [
+                    Text(
+                      formatDateTime(dateTime),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
+                    HSpace.sm,
+                    if (isNotSameDate(dateTime, DateTime.now()))
+                      GloryTinyTextButton(
+                        onPressed: () => setState(() => dateTime = DateTime.now()),
+                        text: 'Set to today',
+                      )
                   ],
                 ),
-              ),
-            ),
-          ],
-        ),
+                onTap: () async {
+                  final date = await showDatePicker(
+                    locale: Localizations.localeOf(context),
+                    context: context,
+                    initialDate: dateTime,
+                    firstDate: firstDate,
+                    lastDate: now,
+                  );
 
-        // 작성/수정 버튼
-        bottomSheet: BottomSheetButton(
-          child: Text('작성', style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white)),
-          onTap: () {
-            if (widget.log == null) {
-              ref.watch(plantListProvider.notifier).addLog(
-                    plantId: widget.plant.id,
-                    description: txtCtrl.text,
-                    tags: tags,
-                    createdAt: dateTime,
-                    image: file,
-                  );
-            } else {
-              ref.watch(plantListProvider.notifier).editLog(
-                    plant: widget.plant,
-                    log: widget.log!,
-                    description: txtCtrl.text,
-                    tags: tags,
-                    createdAt: dateTime,
-                    image: file,
-                  );
-            }
-            Navigator.of(context).pop();
-          },
+                  if (date != null) {
+                    setState(() => dateTime = date);
+                  }
+                },
+              ),
+
+              // 내용
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '내용',
+                    alignLabelWithHint: true,
+                    floatingLabelAlignment: FloatingLabelAlignment.start,
+                  ),
+                  minLines: 5,
+                  maxLines: 20,
+                  controller: txtCtrl,
+                ),
+              ),
+
+              // 태그, 사진
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: SizedBox(
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            TextButton(
+                              child: Text('태그 편집'),
+                              onPressed: () async {
+                                /// Note:
+                                /// 안에서는 setState를 해도 showModalBottomSheet로 그린 위젯은 rerender 되지 않음.
+                                /// 이를 해결하기 위해서는 StatefulBuilder로 inner Widget을 감싸야함.
+                                /// 또한 setState를 StatefulBuilder.builder 콜백의 인자로 주어지는 또다른 setState로 감싸야함.
+                                showModalBottomSheet(
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (context) => StatefulBuilder(
+                                    builder: (context, setOutterState) => Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: TagBottomSheet(
+                                          tags: tags,
+                                          toggle: (tag) {
+                                            tags.contains(tag)
+                                                ? setOutterState(() => setState(() {
+                                                      tags.remove(tag);
+                                                      tags = {...tags};
+                                                    }))
+                                                : setOutterState(() => setState(() {
+                                                      tags = {...tags, tag};
+                                                    }));
+                                          }),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            ...tags.map((tag) {
+                              final colorRaw = tag.color;
+                              final color = Color(colorRaw);
+                              final rgb = toRGB(colorRaw);
+                              final isLight = isLightColor(rgb[0], rgb[1], rgb[2]);
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 3),
+                                child: Chip(
+                                  visualDensity: VisualDensity.compact,
+                                  key: ValueKey(tag),
+                                  label: Text(tag.translateKR,
+                                      style: TextStyle(color: isLight ? Colors.grey[800] : Colors.white)),
+                                  deleteIconColor: isLight ? Colors.grey[800] : Colors.white,
+                                  backgroundColor: color,
+                                ),
+                              );
+                            }).toList(),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        constraints: BoxConstraints.tightFor(width: 40, height: 40),
+                        icon: Icon(CupertinoIcons.camera),
+                        onPressed: () async {
+                          showGloryImagePicker(
+                            context,
+                            (file) => setState(() => this.file = file?.path),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          // 작성/수정 버튼
+          bottomSheet: BottomSheetButton(
+            child: Text('작성', style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white)),
+            onTap: () {
+              if (widget.log == null) {
+                ref.watch(plantListProvider.notifier).addLog(
+                      plantId: widget.plant.id,
+                      description: txtCtrl.text,
+                      tags: tags,
+                      createdAt: dateTime,
+                      image: file,
+                    );
+              } else {
+                ref.watch(plantListProvider.notifier).editLog(
+                      plant: widget.plant,
+                      log: widget.log!,
+                      description: txtCtrl.text,
+                      tags: tags,
+                      createdAt: dateTime,
+                      image: file,
+                    );
+              }
+              Navigator.of(context).pop();
+            },
+          ),
         ),
       ),
     );

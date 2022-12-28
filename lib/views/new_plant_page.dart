@@ -82,34 +82,42 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
           ],
         ),
       ),
-      bottomSheet: GestureDetector(
+      bottomSheet: Padding(
+        padding: MediaQuery.of(context).viewInsets,
         child: Container(
-          height: 50 + MediaQuery.of(context).viewPadding.bottom,
           color: Theme.of(context).primaryColor,
-          alignment: Alignment.center,
-          child: Text(
-            '다음',
-            style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
+          child: SafeArea(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (_controller.text.isEmpty) {
+                  Fluttertoast.showToast(
+                    msg: '식물 이름이 비어있습니다.',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+                  return;
+                }
+                Navigator.of(context).popAndPushNamed(
+                  NewPlanSetWateringPage.pageUrl,
+                  arguments: _WateringArgs(name: _controller.text, image_path: file?.path),
+                );
+              },
+              child: Container(
+                height: 50,
+                alignment: Alignment.center,
+                child: Text(
+                  '다음',
+                  style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
           ),
         ),
-        onTap: () {
-          if (_controller.text.isEmpty) {
-            Fluttertoast.showToast(
-              msg: '식물 이름이 비어있습니다.',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
-            return;
-          }
-          Navigator.of(context).popAndPushNamed(
-            NewPlanSetWateringPage.pageUrl,
-            arguments: _WateringArgs(name: _controller.text, image_path: file?.path),
-          );
-        },
       ),
     );
   }

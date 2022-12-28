@@ -53,6 +53,74 @@ class BottomNavBar extends StatelessWidget {
   }
 }
 
+/// Button to use with [Scaffold.bottomSheet],
+/// deal with home indicator of iOS to add padding.
+///
+/// If don't want button be floating when software keyboard is showing,
+/// set [Scaffold.resizeToAvoidBottomInset] to `false`.
+///
+/// To make this button floating, there are two way.
+///   - passing [BuildContext] directly to this widget.
+///   - use "double scaffold".
+///
+/// To use double scaffold, you need to wrap this widget with two [Scaffold].
+///
+/// Outter scaffold should have `resizeToAvoidBottomInset` set to `true`.
+/// It will resize the body to avoid the keyboard,
+/// and at the same time, **_IT WILL MODIFY THE `viewInsets.bottom` TO ZERO_**.
+///
+/// Inner scaffold should have `resizeToAvoidBottomInset` set to `false`.
+/// It will not resize the body to avoid the keyboard.
+///
+/// If we use only one scaffold and if it has `resizeToAvoidBottomInset` set to `true`,
+/// Button can not have bottom padding, because `viewInsets.bottom` is zero.
+///
+/// If we use only one scaffold and if it has `resizeToAvoidBottomInset` set to `false`,
+/// the button can not be floating.
+///
+/// ```dart
+/// Scaffold(
+///      resizeToAvoidBottomInset: true,
+///      body: Scaffold(
+///        resizeToAvoidBottomInset: false,
+///        body: body,
+///        bottomSheet: BottomSheetButton(),
+///      ),
+///    )
+/// ```
+///
+class BottomSheetButton extends StatelessWidget {
+  const BottomSheetButton({
+    Key? key,
+    required this.onTap,
+    required this.child,
+  }) : super(key: key);
+
+  final VoidCallback onTap;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom * 0.5;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        color: Theme.of(context).primaryColor,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPadding),
+          child: Container(
+            height: 50,
+            alignment: Alignment.center,
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 // Software keyboard 등을 숨기기위해
 class Unfocusable extends StatelessWidget {
   const Unfocusable({

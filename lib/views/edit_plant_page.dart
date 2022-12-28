@@ -43,89 +43,85 @@ class _EditPlantPageState extends ConsumerState<EditPlantPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SubPageAppBar(context, 'Brown Brown', actions: [
-        IconButton(
-            onPressed: () {
-              // FIXME: PlantDetailPage에서 plant가 없기 때문에 에러 발생.
-              // 프로덕션 빌드에서는 큰 문제가 없지만 디버깅에서는 브레이크가 걸림.
-              // 이 페이지는 MainPage와 PlantsPage에서 접근 가능하기 때문에 popuntil도 사용하기 곤란.
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-              ref.watch(plantListProvider.notifier).removePlant(plant);
-            },
-            icon: Icon(CupertinoIcons.trash))
-      ]),
-      body: Column(
-        children: <Widget>[
-          VSpace.xl,
+      resizeToAvoidBottomInset: true,
+      body: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: SubPageAppBar(context, 'Brown Brown', actions: [
+          IconButton(
+              onPressed: () {
+                // FIXME: PlantDetailPage에서 plant가 없기 때문에 에러 발생.
+                // 프로덕션 빌드에서는 큰 문제가 없지만 디버깅에서는 브레이크가 걸림.
+                // 이 페이지는 MainPage와 PlantsPage에서 접근 가능하기 때문에 popuntil도 사용하기 곤란.
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                ref.watch(plantListProvider.notifier).removePlant(plant);
+              },
+              icon: Icon(CupertinoIcons.trash))
+        ]),
+        body: Column(
+          children: <Widget>[
+            VSpace.xl,
 
-          // profile image
-          GestureDetector(
-            onTap: () async {
-              showGloryImagePicker(
-                context,
-                (file) => setState(() => this.file = file),
-              );
-            },
-            child: Stack(
-              children: [
-                SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: CircleAvatar(
-                    maxRadius: 150,
-                    backgroundImage: file == null ? null : resolveImageProvider(file!.path),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+            // profile image
+            GestureDetector(
+              onTap: () async {
+                showGloryImagePicker(
+                  context,
+                  (file) => setState(() => this.file = file),
+                );
+              },
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: CircleAvatar(
+                      maxRadius: 150,
+                      backgroundImage: file == null ? null : resolveImageProvider(file!.path),
                     ),
-                    child: Icon(Icons.add),
                   ),
-                ),
-              ],
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Icon(Icons.add),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          VSpace.xl,
+            VSpace.xl,
 
-          // name
-          DecoInput(
-            controller: nameCtrl,
-            maxWith: 200,
-          ),
-          VSpace.lg,
-
-          // 물주기
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            // name
             DecoInput(
-              controller: wateringCtrl,
-              maxWith: 40,
-              keyboardType: TextInputType.number,
-              maxLength: 2,
-              textAlign: TextAlign.center,
+              controller: nameCtrl,
+              maxWith: 200,
             ),
-            Text('일에 한번씩 물주기'),
-          ]),
-        ],
-      ),
-      bottomSheet: GestureDetector(
-        child: Container(
-          height: 50 + MediaQuery.of(context).viewPadding.bottom,
-          color: Theme.of(context).primaryColor,
-          alignment: Alignment.center,
-          child: Text(
-            '수정',
-            style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
-          ),
+            VSpace.lg,
+
+            // 물주기
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              DecoInput(
+                controller: wateringCtrl,
+                maxWith: 40,
+                keyboardType: TextInputType.number,
+                maxLength: 2,
+                textAlign: TextAlign.center,
+              ),
+              Text('일에 한번씩 물주기'),
+            ]),
+          ],
         ),
-        onTap: () => tryCreate(context),
+        bottomSheet: BottomSheetButton(
+          child: Text('수정', style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white)),
+          onTap: () => tryCreate(context),
+        ),
       ),
     );
   }

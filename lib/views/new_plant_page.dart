@@ -26,97 +26,88 @@ class _NewPlantPageState extends ConsumerState<NewPlantPage> {
 
   @override
   Widget build(BuildContext context) {
+    void tryCreatePlant() {
+      if (_controller.text.isEmpty) {
+        Fluttertoast.showToast(
+          msg: '식물 이름이 비어있습니다.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        return;
+      }
+      Navigator.of(context).popAndPushNamed(
+        NewPlanSetWateringPage.pageUrl,
+        arguments: _WateringArgs(name: _controller.text, image_path: file?.path),
+      );
+    }
+
+    /// Double scaffold, see [BottomSheetButton]
     return Scaffold(
-      appBar: SubPageAppBar(
-        context,
-        'Brown Brown',
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // title
-
-            // profile image
-            GestureDetector(
-              onTap: () async {
-                showGloryImagePicker(
-                  context,
-                  (file) => setState(() => this.file = file),
-                );
-              },
-              child: Stack(
-                children: [
-                  SizedBox(
-                    width: 150,
-                    height: 150,
-                    child: CircleAvatar(
-                      maxRadius: 150,
-                      backgroundImage: file == null ? null : resolveImageProvider(file!.path),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Icon(Icons.add),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            VSpace.md,
-
-            // name
-            DecoInput(
-              controller: _controller,
-              maxWith: 200,
-              hintText: '식물 이름',
-            ),
-          ],
+      resizeToAvoidBottomInset: true,
+      body: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: SubPageAppBar(
+          context,
+          'Brown Brown',
         ),
-      ),
-      bottomSheet: Padding(
-        padding: MediaQuery.of(context).viewInsets,
-        child: Container(
-          color: Theme.of(context).primaryColor,
-          child: SafeArea(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {
-                if (_controller.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: '식물 이름이 비어있습니다.',
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // title
+
+              // profile image
+              GestureDetector(
+                onTap: () async {
+                  showGloryImagePicker(
+                    context,
+                    (file) => setState(() => this.file = file),
                   );
-                  return;
-                }
-                Navigator.of(context).popAndPushNamed(
-                  NewPlanSetWateringPage.pageUrl,
-                  arguments: _WateringArgs(name: _controller.text, image_path: file?.path),
-                );
-              },
-              child: Container(
-                height: 50,
-                alignment: Alignment.center,
-                child: Text(
-                  '다음',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
+                },
+                child: Stack(
+                  children: [
+                    SizedBox(
+                      width: 150,
+                      height: 150,
+                      child: CircleAvatar(
+                        maxRadius: 150,
+                        backgroundImage: file == null ? null : resolveImageProvider(file!.path),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Icon(Icons.add),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
+              VSpace.md,
+
+              // name
+              DecoInput(
+                controller: _controller,
+                maxWith: 200,
+                hintText: '식물 이름',
+              ),
+            ],
           ),
+        ),
+        bottomSheet: BottomSheetButton(
+          onTap: tryCreatePlant,
+          child: Text('다음', style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white)),
         ),
       ),
     );
@@ -205,7 +196,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
           Expanded(
             child: GestureDetector(
               child: Container(
-                height: 50 + MediaQuery.of(context).viewPadding.bottom,
+                height: 50 + MediaQuery.of(context).padding.bottom / 2,
                 color: Theme.of(context).errorColor,
                 alignment: Alignment.center,
                 child: Text(
@@ -221,7 +212,7 @@ class _NewPlanSetWateringPageState extends ConsumerState<NewPlanSetWateringPage>
           Expanded(
             child: GestureDetector(
               child: Container(
-                height: 50 + MediaQuery.of(context).viewPadding.bottom,
+                height: 50 + MediaQuery.of(context).padding.bottom / 2,
                 color: Theme.of(context).primaryColor,
                 alignment: Alignment.center,
                 child: Text(

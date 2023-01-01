@@ -99,7 +99,7 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
                     if (isNotSameDate(dateTime, DateTime.now()))
                       GloryTinyTextButton(
                         onPressed: () => setState(() => dateTime = DateTime.now()),
-                        text: 'Set to today',
+                        text: '오늘',
                       )
                   ],
                 ),
@@ -203,13 +203,19 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
               ),
 
               // 사진
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                    itemBuilder: photoGridBuilder,
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: drwaPhotoSelector(context),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Container(),
+                    )
+                  ],
                 ),
               ),
             ],
@@ -245,43 +251,51 @@ class _PlantLogEditPageState extends ConsumerState<PlantLogEditPage> {
     );
   }
 
-  Widget photoGridBuilder(BuildContext context, int index) {
-    // currently only one photo is supported
-    if (index != 0) return Container();
+  AspectRatio drwaPhotoSelector(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: InkWell(
+        onTap: () async {
+          // If photo is null, show image picker, otherwise show dialog to delete photo
+          if (file == null) {
+            showGloryImagePicker(context, (file) => setState(() => this.file = file?.path));
+            return;
+          }
 
-    return InkWell(
-      onTap: () async {
-        // If photo is null, show image picker, otherwise show dialog to delete photo
-        if (file == null) return showGloryImagePicker(context, (file) => setState(() => this.file = file?.path));
+          final result = await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('사진 삭제'),
+              content: Text('사진을 삭제하시겠습니까?'),
+              actions: [
+                TextButton(
+                  child: Text('취소'),
+                  onPressed: () => Navigator.of(context).pop(false),
+                ),
+                TextButton(
+                  child: Text('삭제'),
+                  onPressed: () => Navigator.of(context).pop(true),
+                ),
+              ],
+            ),
+          );
 
-        final result = await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('사진 삭제'),
-            content: Text('사진을 삭제하시겠습니까?'),
-            actions: [
-              TextButton(
-                child: Text('취소'),
-                onPressed: () => Navigator.of(context).pop(false),
-              ),
-              TextButton(
-                child: Text('삭제'),
-                onPressed: () => Navigator.of(context).pop(true),
-              ),
-            ],
+          if (result == true) setState(() => file = null);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
           ),
-        );
-
-        if (result == true) setState(() => file = null);
-      },
-      child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-        child: file == null
-            ? Icon(CupertinoIcons.camera)
-            : Image.file(
-                File(file!),
-                fit: BoxFit.cover,
-              ),
+          child: file == null
+              ? Icon(
+                  CupertinoIcons.camera,
+                  color: Colors.grey,
+                )
+              : Image.file(
+                  File(file!),
+                  fit: BoxFit.cover,
+                ),
+        ),
       ),
     );
   }

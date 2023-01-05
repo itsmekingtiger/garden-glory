@@ -164,6 +164,11 @@ class CustomColor {
 // 3b84ea
 // 1e2b40 // toss dark blue
 
+// Garden color
+// rgb(24, 71, 51)
+// rgb(236, 218, 178)
+// rgb(201, 35, 25)
+
 /// [Determine If A Color Is Bright Or Dark Using JavaScript - Andreas Wik](https://awik.io/determine-color-bright-dark-using-javascript/)
 bool isLightColor(int r, int g, int b) {
   // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html

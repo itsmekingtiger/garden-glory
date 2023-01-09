@@ -32,7 +32,16 @@ class MainPage extends ConsumerWidget {
               child: Text('물주기를 기다리고 있어요', style: Theme.of(context).textTheme.bodySmall),
             ),
 
-          ...needWaterings.map((plant) => drawWateringNotificationItem(plant, ref)).toList(),
+          SlidableAutoCloseBehavior(
+            closeWhenOpened: true,
+            child: ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                ...needWaterings.map((plant) => drawWateringNotificationItem(context, plant, ref)).toList(),
+              ],
+            ),
+          ),
 
           // Long time no see section
         ],
@@ -40,20 +49,27 @@ class MainPage extends ConsumerWidget {
     );
   }
 
-  Slidable drawWateringNotificationItem(Plant plant, WidgetRef ref) {
+  Slidable drawWateringNotificationItem(BuildContext context, Plant plant, WidgetRef ref) {
     return Slidable(
       endActionPane: ActionPane(motion: DrawerMotion(), children: [
+        // 물과 비료 주기
         SlidableAction(
           // An action can be bigger than the others.
           flex: 1,
-          onPressed: (context) => Navigator.of(context).pushNamed(
-            PlantLogEditPage.pageUrl,
-            arguments: {'plant': plant},
-          ),
+          onPressed: (context) {
+            ref.watch(plantListProvider.notifier).addLog(
+                  plantId: plant.id,
+                  description: '물과 비료을 줬어요',
+                  tags: {TagType.watering, TagType.feeding},
+                  createdAt: DateTime.now(),
+                );
+          },
           backgroundColor: Color(0xFF386641),
           foregroundColor: Colors.white,
-          icon: Icons.edit_calendar_rounded,
+          icon: Icons.oil_barrel,
         ),
+
+        // 물주기
         SlidableAction(
           flex: 1,
           onPressed: (context) {
@@ -80,6 +96,10 @@ class MainPage extends ConsumerWidget {
             fontWeight: FontWeight.bold,
             color: CustomColor.tosslightblue,
           ),
+        ),
+        onTap: () => Navigator.of(context).pushNamed(
+          PlantLogEditPage.pageUrl,
+          arguments: {'plant': plant},
         ),
       ),
     );

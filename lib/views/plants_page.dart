@@ -22,9 +22,15 @@ class PlantsPage extends ConsumerWidget {
       children: [
         // List of plants
         Expanded(
-          child: ListView.builder(
-            itemCount: plants.length,
-            itemBuilder: (context, index) => ZoomOutAnimationWrapper(child: PlantListItem(plant: plants[index])),
+          child: ScrollConfiguration(
+            behavior: const ScrollBehavior().copyWith(overscroll: false),
+            child: StretchingOverscrollIndicator(
+              axisDirection: AxisDirection.down,
+              child: ListView.builder(
+                itemCount: plants.length,
+                itemBuilder: (context, index) => ZoomOutAnimationWrapper(child: PlantListItem(plant: plants[index])),
+              ),
+            ),
           ),
         ),
       ],

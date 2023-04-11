@@ -16,8 +16,8 @@ Future<Map<String, String>> getBuildInfo() async {
   String branch = '';
 
   try {
-    commitId = await rootBundle.loadString('.git/ORIG_HEAD');
-    head = await rootBundle.loadString('.git/HEAD');
+    commitId = await rootBundle.loadString('../.git/ORIG_HEAD');
+    head = await rootBundle.loadString('../.git/HEAD');
     branch = head.split('/').last;
   } catch (e) {
     // ignore silently

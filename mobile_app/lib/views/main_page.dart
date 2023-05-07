@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/entities/tag_type.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
-import 'package:brown_brown/ui/colors.dart';
+import 'package:brown_brown/ui/styles.dart';
 import 'package:brown_brown/utils/datetime_helper.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class MainPage extends ConsumerWidget {
   static const pageUrl = '/main';
@@ -27,80 +26,105 @@ class MainPage extends ConsumerWidget {
           // Watering Notification Section
 
           if (needWaterings.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('물주기를 기다리고 있어요', style: Theme.of(context).textTheme.bodySmall),
+            Container(
+              padding: EdgeInsets.all(Insets.lg),
+              alignment: Alignment.center,
+              child: Text('물주기를 기다리고 있어요', style: Theme.of(context).textTheme.headlineSmall),
             ),
 
-          SlidableAutoCloseBehavior(
-            closeWhenOpened: true,
-            child: ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                ...needWaterings.map((plant) => drawWateringNotificationItem(context, plant, ref)).toList(),
-              ],
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 400.0,
+              enlargeCenterPage: true,
+              clipBehavior: Clip.none,
+              enableInfiniteScroll: false,
             ),
+            items: needWaterings.map((plant) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 15,
+                          offset: Offset(0, 10), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pushNamed(
+                        PlantLogEditPage.pageUrl,
+                        arguments: {'plant': plant},
+                      ),
+                      child: ClipRRect(
+                        borderRadius: Corners.mdBorder,
+                        clipBehavior: Clip.antiAlias,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Colors.black87,
+                            ),
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                if (plant.profileImage != null)
+                                  Image(height: 400.0, image: FileImage(File(plant.profileImage!)), fit: BoxFit.cover),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      plant.name,
+                                      style: TextStyles.headerInversed.copyWith(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: Text(
+                                      dateAgo(plant.nextWatring!, DateTime.now()),
+                                      style: TextStyles.headerInversed.copyWith(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 9),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        backgroundColor: Colors.black,
+                                        textStyle: TextStyles.headerInversed,
+                                      ),
+                                      child: Text('Watering now'),
+                                      onPressed: () {
+                                        ref.watch(plantListProvider.notifier).addLog(
+                                              plantId: plant.id,
+                                              description: '물과 비료을 줬어요',
+                                              tags: {TagType.watering, TagType.feeding},
+                                              createdAt: DateTime.now(),
+                                            );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ),
+                    ),
+                  );
+                },
+              );
+            }).toList(),
           ),
 
           // Long time no see section
         ],
-      ),
-    );
-  }
-
-  Slidable drawWateringNotificationItem(BuildContext context, Plant plant, WidgetRef ref) {
-    return Slidable(
-      endActionPane: ActionPane(motion: DrawerMotion(), children: [
-        // 물과 비료 주기
-        SlidableAction(
-          // An action can be bigger than the others.
-          flex: 1,
-          onPressed: (context) {
-            ref.watch(plantListProvider.notifier).addLog(
-                  plantId: plant.id,
-                  description: '물과 비료을 줬어요',
-                  tags: {TagType.watering, TagType.feeding},
-                  createdAt: DateTime.now(),
-                );
-          },
-          backgroundColor: Color(0xFF386641),
-          foregroundColor: Colors.white,
-          icon: Icons.oil_barrel,
-        ),
-
-        // 물주기
-        SlidableAction(
-          flex: 1,
-          onPressed: (context) {
-            ref.watch(plantListProvider.notifier).addLog(
-                  plantId: plant.id,
-                  description: '물을 줬어요',
-                  tags: {TagType.watering},
-                  createdAt: DateTime.now(),
-                );
-          },
-          backgroundColor: Color(0xFF6a994e),
-          foregroundColor: Colors.white,
-          icon: Icons.water_drop,
-        ),
-      ]),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundImage: plant.profileImage == null ? null : FileImage(File(plant.profileImage!)),
-        ),
-        title: Text(plant.name, style: GoogleFonts.notoSans(textStyle: TextStyle(fontWeight: FontWeight.w500))),
-        trailing: Text(
-          dateAgo(plant.nextWatring!, DateTime.now()),
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: CustomColor.tosslightblue,
-          ),
-        ),
-        onTap: () => Navigator.of(context).pushNamed(
-          PlantLogEditPage.pageUrl,
-          arguments: {'plant': plant},
-        ),
       ),
     );
   }

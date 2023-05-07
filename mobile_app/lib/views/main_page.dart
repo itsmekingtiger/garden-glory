@@ -67,7 +67,7 @@ class MainPage extends ConsumerWidget {
                               color: Colors.black87,
                             ),
                             child: Stack(
-                              fit: StackFit.expand,
+                              fit: StackFit.expand, // 없으면 이미지 Boxfit.cover가 제대로 동작하지 않음
                               children: [
                                 if (plant.profileImage != null)
                                   Image(height: 400.0, image: FileImage(File(plant.profileImage!)), fit: BoxFit.cover),
@@ -101,7 +101,7 @@ class MainPage extends ConsumerWidget {
                                         backgroundColor: Colors.black,
                                         textStyle: TextStyles.headerInversed,
                                       ),
-                                      child: Text('Watering now'),
+                                      child: Text('Water now'),
                                       onPressed: () {
                                         ref.watch(plantListProvider.notifier).addLog(
                                               plantId: plant.id,

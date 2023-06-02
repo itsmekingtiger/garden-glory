@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:brown_brown/images/image_manger.dart';
 import 'package:brown_brown/ui/styles.dart';
+import 'package:brown_brown/utils/platform_util.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -28,8 +30,7 @@ class _GloryImagePickerState extends State<GloryImagePicker> {
 
   VoidCallback _pickWith(source) {
     return () async {
-      final f = await _picker.pickImage(source: source);
-
+      XFile? f = await pickByPlatform(source);
       if (f == null) {
         return;
       }
@@ -38,6 +39,23 @@ class _GloryImagePickerState extends State<GloryImagePicker> {
 
       widget.onPicked(savedImage);
     };
+  }
+
+  Future<XFile?> pickByPlatform(source) async {
+    if (isMobile()) {
+      return await _picker.pickImage(source: source);
+    }
+
+    if (isDesktop()) {
+      final typeGroup = XTypeGroup(
+        label: 'images',
+        extensions: const ['jpg', 'png', 'heic'],
+      );
+
+      return await openFile(acceptedTypeGroups: [typeGroup]);
+    }
+
+    return null;
   }
 
   @override

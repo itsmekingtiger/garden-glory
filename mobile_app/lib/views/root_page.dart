@@ -2,6 +2,7 @@ import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/providers/plant_provider.dart';
 import 'package:brown_brown/utils/build_info.dart';
 import 'package:brown_brown/views/main_page.dart';
+import 'package:brown_brown/views/mini_wiki.dart';
 import 'package:brown_brown/views/plants_page.dart';
 import 'package:brown_brown/views/third_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -88,6 +89,7 @@ class _RootPageState extends ConsumerState {
               ),
               ListTile(title: Text('Open source license'), onTap: () => showLicensePage(context: context)),
               // ListTile(title: Text('로그'), onTap: () {}),
+              ListTile(title: Text('미니 위키'), onTap: () => Navigator.of(context).pushNamed(MiniWikiPage.pageUrl)),
 
               // Import and Export
             ],

@@ -2,6 +2,7 @@ import 'package:brown_brown/entities/plant.dart';
 import 'package:brown_brown/entities/plantlog.dart';
 import 'package:brown_brown/entities/tag_type.dart';
 import 'package:brown_brown/views/edit_plant_page.dart';
+import 'package:brown_brown/views/mini_wiki.dart';
 import 'package:brown_brown/views/new_plant_page.dart';
 import 'package:brown_brown/views/plant_detail_page.dart';
 import 'package:brown_brown/views/plant_log_edit_page.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
               plant: _args(context, 'plant'),
               log: _args(context, 'log'),
             ),
+        MiniWikiPage.pageUrl: (context) => MiniWikiPage(),
       },
     );
   }

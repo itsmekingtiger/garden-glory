@@ -54,11 +54,12 @@ class FertilizerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       margin: EdgeInsets.all(Insets.sm),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${data.name} (${data.pctOfN()} - ${data.pctOfP()} - ${data.pctOfK()})'),
+          Text(data.name),
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -66,26 +67,26 @@ class FertilizerCard extends StatelessWidget {
                 Expanded(
                     flex: data.n,
                     child: Container(
-                      color: Colors.green,
-                      child: Text('N', textAlign: TextAlign.center),
+                      color: Color(0XFFB5B991),
+                      child: Text('N\n${data.pctOfN()}', textAlign: TextAlign.center),
                     )),
               if (data.pctOfP() != 0)
                 Expanded(
                     flex: data.p,
                     child: Container(
-                      color: Colors.teal,
-                      child: Text('P', textAlign: TextAlign.center),
+                      color: Color(0XFFEDBB8A),
+                      child: Text('P\n${data.pctOfP()}', textAlign: TextAlign.center),
                     )),
               if (data.pctOfK() != 0)
                 Expanded(
                     flex: data.k,
                     child: Container(
-                      color: Colors.brown,
-                      child: Text('K', textAlign: TextAlign.center),
+                      color: Color(0XFFA7D3D4),
+                      child: Text('K\n${data.pctOfK()}', textAlign: TextAlign.center),
                     )),
             ],
           ),
-          VSpace.sm,
+          VSpace.xs,
         ],
       ),
     );
